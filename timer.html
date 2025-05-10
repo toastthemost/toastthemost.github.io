@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Timekeeper</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <h1>Toastmasters Timekeeper</h1>
+  <div class="container">
+    <div class="main-content">
+      <div class="note">Enter speaker name and speech type manually or insert from the list</div>
+      <div class="controls">
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+          <button onclick="pickFromList()" class="btn-standard" id="pickBtn" disabled>Insert Name from List</button>
+        </div>
+        <div style="text-align: center; font-weight: bold; margin-top: 20px;">OR</div>
+        <label for="speechType">Speaker Details</label>
+        <div style="display: flex; flex-direction: row; gap: 10px; width: 100%; margin-bottom: 10px">
+          <select id="speechType" style="flex: 1;">
+            <option value="4,5,6">Ice Breaker (4-6 min)</option>
+            <option value="5,6,7">Other Speech (5-7 min)</option>
+            <option value="1,1.5,2">Table Topic (1-2 min)</option>
+            <option value="2,2.5,3">Evaluator (2-3 min)</option>
+          </select>
+
+          <div style="display: flex; flex-direction: column; gap: 6px; flex: 1;">
+            <input type="text" id="speakerName" placeholder="Enter speaker name" />
+          </div>
+        </div>
+
+        <div style="text-align: left; font-weight: bold;margin-top: 30px; margin-bottom: 10px;">Current Speech</div>
+        <div style="background: white; padding: 10px; border-radius: 8px; box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1)">
+          <div id="timer">00:00</div>
+
+          <div class="button-group">
+            <button id="startBtn" class="btn-start" onclick="toggleStartPause()" disabled>Start</button>
+            <button id="stopBtn" class="btn-stop" onclick="stopTimer()" disabled>Stop</button>
+          </div>
+          </div>
+      </div>
+
+      <div class="log-section">
+        <label for="logBox">Log:</label>
+        <textarea id="logBox" rows="6"></textarea>
+        <div style="display: flex; gap: 10px; margin-top: 10px;">
+          <button onclick="exportLogs()" class="btn-standard">Export Logs</button>
+          <button onclick="resetLogs()" class="btn-reset btn-danger">Reset Logs</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="speakerSection">
+      <h2>Speakers' List</h2>
+      <div class="note">Use this section to add speakers in advance.</div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <input type="text" id="newSpeakerName" placeholder="Speaker name" style="flex: 1; min-width: 200px;">
+        <select id="newSpeechType" style="flex: 1; min-width: 200px;">
+          <option value="4,5,6">Ice Breaker (4-6 min)</option>
+          <option value="5,6,7">Other Speech (5-7 min)</option>
+          <option value="1,1.5,2">Table Topic (1-2 min)</option>
+          <option value="2,2.5,3">Evaluator (2-3 min)</option>
+        </select>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 10px;">
+        <button onclick="addSpeaker()"  class="btn-standard" id="addSpeakerBtn" disabled>Add Speaker</button>
+        <button onclick="deleteSpeaker()"  class="btn-standard" id="deleteSpeakerBtn" disabled>Delete Last</button>
+      </div>
+      <ul id="speakerList"></ul>
+    </div>
+  </div>
+  <script src="timer_script.js"></script>
+</body>
+</html>

@@ -1,0 +1,310 @@
+h1 {
+  text-align: center;
+  font-size: 28px;
+  margin-bottom: 20px;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 20px;
+  background-color: #f4f4f4;
+  color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  align-items: center;
+}
+
+.nav-buttons {
+  background-color: #007bff;
+  color: white;
+  padding: 12px 24px;
+  text-decoration: none;
+  border-radius: 6px;
+  font-size: 16px;
+  font-weight: bold;
+  transition: background-color 0.3s ease;
+  display: inline-block;
+  min-width: 100px;
+  text-align: center;
+  gap: 30px;
+}
+
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: 40px;
+}
+
+.homepage {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+@media (min-width: 768px) {
+  .container {
+    display: flex;
+    flex-direction: row;
+    align-items: flex-start;
+    gap: 40px;
+  }
+
+  .homepage {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+  .library {
+    flex: 1;
+  }
+
+  .main-content {
+    flex: 2;
+  }
+
+  .speakerSection {
+    flex: 1;
+    margin-top: 0;
+   }
+}
+
+label {
+  font-weight: bold;
+  display: block;
+  margin-top: 15px;
+}
+input, select, button, textarea {
+  padding: 10px;
+  font-size: 16px;
+  margin-top: 5px;
+  width: 100%;
+  box-sizing: border-box;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  color: white;
+}
+button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+button:disabled {
+  background-color: #ccc;
+  cursor: not-allowed;
+}
+.button-group {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-top: 20px;
+}
+#timer {
+  font-size: 60px;
+  text-align: center;
+  margin: 30px 0;
+  font-weight: bold;
+}
+textarea {
+  resize: vertical;
+  min-height: 100px;
+}
+.log-section {
+  margin-top: 30px;
+}
+
+/* 🟨 Custom colors for buttons based on their function */
+.btn-start {
+  background-color: #28a745; /* green */
+}
+.btn-pause {
+  background-color: #fd7e14; /* orange */
+}
+.btn-stop {
+  background-color: #8b0000; /* red */
+}
+.btn-export {
+  background-color: #17a2b8; /* teal */
+}
+.btn-reset {
+  background-color: #17a2b8; /* gray */
+}
+.btn-standard {
+  background-color: #007bff /* standard blue */
+}
+
+/* --------------- Library ---------------- */
+
+.library {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.librarySection {
+ display: flex;
+ gap: 10px;
+ margin-bottom: 10px;
+}
+
+.btn-library {
+    background-color: #64b5f6;   /* Button color */
+    color: white;                /* Text color */
+    border: none;                /* Removes border */
+    padding: 10px 8px;          /* Size of button */
+    font-size: 14px;             /* Text size */
+    border-radius: 5px;          /* Rounded corners */
+    cursor: pointer;             /* Pointer on hover */
+}
+
+.library h2 {
+  font-size: 20px;
+  margin-top: 0;
+}
+
+.library h4 {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+/* --------------- Speakers ---------------- */
+
+.speakerSection {
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: white;
+}
+
+.speakerSection h2 {
+  font-size: 20px;
+  margin-top: 0;
+}
+
+.speakerSection h3 {
+  font-size: 18px;
+  margin-top: 0;
+}
+
+.speakerSection h4 {
+  font-size: 14px;
+  margin-bottom: 0;
+}
+
+.note {
+  font-size: 14px;
+  color: #555;
+  margin-bottom: 10px;
+}
+
+#speakerList {
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  padding: 10px;
+  list-style: none;
+  max-height: 250px;
+  overflow-y: auto;
+  margin-top: 10px;
+}
+
+#speakerList li {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 6px;
+    padding: 8px 10px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: background-color 0.2s ease;
+}
+
+/* ----------- Ah Counter --------*/
+.category-buttons button {
+  margin: 3px;
+}
+
+
+
+.currentFillerSection {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    width: 100%;
+}
+
+.currentFillerSection input {
+    flex: 1;                   /* input fills available space */
+    min-width: 0;              /* prevents overflow issue */
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 14px;
+    width: auto;
+}
+
+.currentFillerSection button {
+    flex: 0 0 auto;            /* button stays at natural width */
+    padding: 8px 50px;
+    border: none;
+    border-radius: 5px;
+    background-color: #81c784;
+    color: white;
+    font-size: 14px;
+    cursor: pointer;
+    width: auto;
+}
+
+.currentFillerSection button:disabled {
+    background-color: #ccc;
+}
+
+#fillerTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+}
+
+#fillerTable th, #fillerTable td {
+    background: white;
+    border: 1px solid #ddd;
+    padding: 5px;
+    text-align: center;
+}
+
+#fillerTable th {
+    background-color: #white;
+    padding: 10px;
+}
+
+.increment-btn {
+    background-color: #81c784;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+}
+
+.increment-btn:hover {
+    background-color: #66bb6a;
+}
+
+.btn-danger {
+    background-color: #800000;
+    border-radius: 5px;
+    padding: 8px 14px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}

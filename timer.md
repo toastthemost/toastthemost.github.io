@@ -2,17 +2,15 @@
 # Feel free to add content and custom Front Matter to this file.
 # To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
 
-layout: page
+layout: default
+title: Timekeeper
 ---
-
 <html>
-<head>
-  <link rel="stylesheet" href="style.css">
-</head>
 <body>
-  <div class="container">
+  <h1>Timekeeper</h1>
+  <div class="homepage">
     <div class="main-content">
-      <label for="speechType" style="text-align: left; font-weight: bold; margin-top: 30px;">Speaker's Details</label>
+      <label for="speechType" class="main-section-label">Speaker's Details</label>
       <div class="note">Enter speaker name and speech type manually or insert from the list</div>
       <div class="controls">
         <div style="display: flex; flex-direction: column; gap: 6px;">
@@ -28,18 +26,18 @@ layout: page
             <input type="text" id="speakerName" placeholder="Enter speaker name" style="flex: 1"/>
           </div>
         </div>
-        <div style="text-align: left; font-weight: bold;margin-top: 30px; margin-bottom: 10px;">Current Speech</div>
+        <div class="main-section-label">Current Speech</div>
         <div class="note">The timer for selected current speaker will appear here</div>
         <div class="playground">
           <div id="timer">00:00</div>
-          <div class="row-group">
+          <div class="start-stop-group">
             <button id="startBtn" class="btn-start" onclick="toggleStartPause()" disabled>Start</button>
             <button id="stopBtn" class="btn-stop" onclick="stopTimer()" disabled>Stop</button>
           </div>
         </div>
       </div>
       <div class="log-section" style="margin-top: 30px;">
-        <label for="logBox" style="text-align: left; font-weight: bold; margin-top: 30px;">Meeting Logs</label>
+        <label for="logBox" class="main-section-label">Meeting Logs</label>
         <div class="note">Records every speaker's timings after every speech</div>
         <textarea id="logBox" rows="6"></textarea>
         <div class="row-group">
@@ -67,6 +65,6 @@ layout: page
       <ul id="speakerList"></ul>
     </div>
   </div>
-  <script src="timer_script.js"></script>
+  <script src="assets/js/timer.js"></script>
 </body>
 </html>

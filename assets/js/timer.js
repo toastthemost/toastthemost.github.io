@@ -8,19 +8,20 @@ const addSpeakerBtn = document.getElementById('addSpeakerBtn');
 const deleteSpeakerBtn = document.getElementById('deleteSpeakerBtn');
 const speakerList = document.getElementById('speakerList');
 const pickBtn = document.getElementById('pickBtn');
-const currentSpeakerInput = document.getElementById('speakerName');
+const nameInput = document.getElementById('speakerName');
+const speechSelection = document.getElementById('speechType');
 const startBtn = document.getElementById('startBtn');
+const stopBtn = document.getElementById('stopBtn')
+const timerDisplay = document.getElementById('timer');
+const logBox = document.getElementById('logBox');
 
 newSpeakerInput.addEventListener('input', () => {
   addSpeakerBtn.disabled = !newSpeakerInput.value.trim();
 });
 
-currentSpeakerInput.addEventListener('input', () => {
-    const hasSpeaker = currentSpeakerInput.value.trim() !== '';
-    startBtn.disabled = !hasSpeaker;
-    newFillerInput.disabled = !hasSpeaker;
-    addBtn.disabled = !hasSpeaker;
-
+nameInput.addEventListener('input', () => {
+    const emptyNameInput = nameInput.value.trim() === '';
+    startBtn.disabled = emptyNameInput;
 });
 
 let speakerQueue = [];
@@ -30,19 +31,16 @@ let elapsedBeforePause = 0;
 let isPaused = false;
 let minShown = false;
 let midShown = false;
-const counterSection = document.getElementById('counterSection');
+
 
 function toggleStartPause() {
-  const btn = document.getElementById('startBtn');
-  const nameInput = document.getElementById('speakerName');
-  const speechSelect = document.getElementById('speechType');
 
   if (!nameInput.value.trim()) {
     alert('Please enter a speaker name.');
     return;
   }
 
-  if (btn.textContent === 'Start' || btn.textContent === 'Resume') {
+  if (startBtn.textContent === 'Start' || startBtn.textContent === 'Resume') {
     minShown = false;
     midShown = false;
     if (!isPaused) {
@@ -54,9 +52,9 @@ function toggleStartPause() {
       const elapsed = Date.now() - startTime;
       const minutes = Math.floor(elapsed / 60000);
       const seconds = Math.floor((elapsed % 60000) / 1000);
-      document.getElementById('timer').textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      timerDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
-      const times = speechSelect.value.split(',');
+      const times = speechSelection.value.split(',');
       const minTime = parseFloat(times[0]) * 60000;
       const midTime = parseFloat(times[1]) * 60000;
       const maxTime = parseFloat(times[2]) * 60000;
@@ -66,39 +64,39 @@ function toggleStartPause() {
         midShown = true;
         minShown = true;
       } else if (elapsed >= midTime && !midShown) {
-  midShown = true;
-  document.body.style.backgroundColor = '#ffff66';
-  const currentMidTime = Date.now();
-  setTimeout(() => {
-    if (!isPaused && Date.now() - currentMidTime >= 5000 && document.body.style.backgroundColor === '#ffff66') {
-      document.body.style.backgroundColor = '#f4f4f4';
-    }
-  }, 5000);
+        midShown = true;
+        document.body.style.backgroundColor = '#ffff66';
+        const currentMidTime = Date.now();
+        setTimeout(() => {
+          if (!isPaused && Date.now() - currentMidTime >= 5000 && document.body.style.backgroundColor === '#ffff66') {
+            document.body.style.backgroundColor = '#f4f4f4';
+          }
+        }, 5000);
       } else if (elapsed >= minTime && !minShown) {
-  minShown = true;
-  document.body.style.backgroundColor = '#66ff66';
-  const currentMinTime = Date.now();
-  setTimeout(() => {
-    if (!isPaused && Date.now() - currentMinTime >= 5000 && document.body.style.backgroundColor === '#66ff66') {
-      document.body.style.backgroundColor = '#f4f4f4';
-    }
-  }, 5000);
+        minShown = true;
+        document.body.style.backgroundColor = '#66ff66';
+        const currentMinTime = Date.now();
+        setTimeout(() => {
+          if (!isPaused && Date.now() - currentMinTime >= 5000 && document.body.style.backgroundColor === '#66ff66') {
+            document.body.style.backgroundColor = '#f4f4f4';
+          }
+        }, 5000);
       }
     }, 1000);
 
     isPaused = false;
-    btn.textContent = 'Pause';
-    btn.className = 'btn-pause';
-    document.getElementById('stopBtn').disabled = false;
+    startBtn.textContent = 'Pause';
+    startBtn.className = 'btn-pause';
+    stopBtn.disabled = false;
     nameInput.disabled = true;
-    speechSelect.disabled = true;
-    document.getElementById('pickBtn').disabled = true;
-  } else if (btn.textContent === 'Pause') {
+    speechSelection.disabled = true;
+    pickBtn.disabled = true;
+  } else if (startBtn.textContent === 'Pause') {
     clearInterval(timer);
     elapsedBeforePause = Date.now() - startTime;
     isPaused = true;
-    btn.textContent = 'Resume';
-    btn.className = 'btn-start';
+    startBtn.textContent = 'Resume';
+    startBtn.className = 'btn-start';
   }
 }
 
@@ -108,24 +106,31 @@ function stopTimer() {
   const minutes = Math.floor(elapsed / 60000);
   const seconds = Math.floor((elapsed % 60000) / 1000);
   const formattedTime = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
-  const speakerName = document.getElementById('speakerName').value.trim();
-  const speechLabel = document.getElementById('speechType').selectedOptions[0].text.split(' (')[0];
+  const speakerName = nameInput.value.trim();
+  const speechLabel = speechSelection.selectedOptions[0].text.split(' (')[0];
+  const times = speechSelection.value.split(',');
+  const minTime = parseFloat(times[0]) * 60000;
+  const maxTime = parseFloat(times[2]) * 60000;
+
+  let withinTime = "Yes";
+
+  if (elapsed > maxTime || elapsed < minTime) {
+    withinTime = "No";
+  }
   if (speakerName) {
-    const logEntry = `${speakerName} (${speechLabel}): ${formattedTime}`;
-    const logBox = document.getElementById('logBox');
+    const logEntry = `${speakerName} (${speechLabel}) | ${formattedTime} | Within Time: ${withinTime}`;
     logBox.value += (logBox.value ? '\n' : '') + logEntry;
   }
 
-  document.getElementById('timer').textContent = '00:00';
-  const startBtn = document.getElementById('startBtn');
+  timerDisplay.textContent = '00:00';
   startBtn.textContent = 'Start';
   startBtn.className = 'btn-start'
   startBtn.disabled = true;
-  document.getElementById('stopBtn').disabled = true;
-  document.getElementById('speakerName').disabled = false;
-  document.getElementById('speechType').disabled = false;
-  document.getElementById('pickBtn').disabled = speakerQueue.length === 0;
-  document.getElementById('speakerName').value = '';
+  stopBtn.disabled = true;
+  nameInput.disabled = false;
+  speechSelection.disabled = false;
+  pickBtn.disabled = speakerQueue.length === 0;
+  nameInput.value = '';
   startTime = null;
   elapsedBeforePause = 0;
   document.body.style.backgroundColor = '#f4f4f4';
@@ -133,12 +138,12 @@ function stopTimer() {
 }
 
 function resetLogs() {
-  document.getElementById('logBox').value = '';
-  document.getElementById('speakerName').value = '';
+  logBox.value = '';
+  nameInput.value = '';
 }
 
 function exportLogs() {
-  const content = document.getElementById('logBox').value;
+  const content = logBox.value;
   if (!content.trim()) {
     alert("No logs to export.");
     return;
@@ -196,9 +201,8 @@ function deleteSpeaker() {
 function pickFromList() {
   if (speakerQueue.length === 0) return;
   const speaker = speakerQueue.shift();
-  document.getElementById('speakerName').value = speaker.name;
-  document.getElementById('speechType').value = speaker.value;
+  nameInput.value = speaker.name;
+  speechSelection.value = speaker.value;
   renderSpeakerList();
-  document.getElementById('startBtn').disabled = !speaker.name.trim();
-  document.getElementById('addBtn').disabled = false;
+  startBtn.disabled = !speaker.name.trim();
 }

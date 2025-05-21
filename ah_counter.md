@@ -19,6 +19,9 @@ title: Ah-Counter
         <button onclick="addWordToFillerTable('Er')" class="btn-library">Er</button>
         <button onclick="addWordToFillerTable('Hm')" class="btn-library">Hm</button>
       </div>
+      <div class="library-section">
+        <button onclick="addWordToFillerTable('Long Pause')" class="btn-library">Long Pause</button>
+      </div>
       <h4>Single Words</h4>
       <div class="library-section">
         <button onclick="addWordToFillerTable('Yeah')" class="btn-library">yeah</button>
@@ -33,7 +36,7 @@ title: Ah-Counter
       </div>
       <div class="library-section">
         <button onclick="addWordToFillerTable('Now')" class="btn-library">Now</button>
-        <button onclick="addWordToFillerTable('Anyway')" class="btn-library">Anyway</button>
+        <button onclick="addWordToFillerTable('And')" class="btn-library">And</button>
         <button onclick="addWordToFillerTable('Right')" class="btn-library">Right?</button>
       </div>
       <h4>Phrases</h4>

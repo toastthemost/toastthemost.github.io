@@ -2,6 +2,38 @@ function escapeHTML(str) {
   return str.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
 }
 
+let speakerQueue = [];
+const newSpeakerInput = document.getElementById('newSpeakerName');
+const newSpeechSelect = document.getElementById('newSpeechType');
+const addSpeakerBtn = document.getElementById('addSpeakerBtn');
+const deleteSpeakerBtn = document.getElementById('deleteSpeakerBtn');
+const speakerList = document.getElementById('speakerList');
+const pickBtn = document.getElementById('pickBtn');
+const currentSpeakerInput = document.getElementById('speakerName');
+const addBtn = document.getElementById('addBtn');
+const newFillerInput = document.getElementById('newFiller');
+const recordLogs = document.getElementById('recordLogs');
+
+newSpeakerInput.addEventListener('input', () => {
+  addSpeakerBtn.disabled = !newSpeakerInput.value.trim();
+});
+
+newFillerInput.addEventListener('input', () => {
+    addBtn.disabled = !newFillerInput.value.trim();
+});
+
+// ✅ Enter key support for New Filler input
+document.addEventListener('DOMContentLoaded', function() {
+    newFillerInput.addEventListener('keydown', function(event) {
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            if (!addBtn.disabled) {
+                addBtn.click();
+            }
+        }
+    });
+});
+
 function resetLogs() {
   document.getElementById('logBox').value = '';
   document.getElementById('speakerName').value = '';
@@ -34,26 +66,6 @@ function exportLogs() {
     URL.revokeObjectURL(url);
   }
 }
-
-let speakerQueue = [];
-const newSpeakerInput = document.getElementById('newSpeakerName');
-const newSpeechSelect = document.getElementById('newSpeechType');
-const addSpeakerBtn = document.getElementById('addSpeakerBtn');
-const deleteSpeakerBtn = document.getElementById('deleteSpeakerBtn');
-const speakerList = document.getElementById('speakerList');
-const pickBtn = document.getElementById('pickBtn');
-const currentSpeakerInput = document.getElementById('speakerName');
-const addBtn = document.getElementById('addBtn');
-const newFillerInput = document.getElementById('newFiller');
-const recordLogs = document.getElementById('recordLogs');
-
-newSpeakerInput.addEventListener('input', () => {
-  addSpeakerBtn.disabled = !newSpeakerInput.value.trim();
-});
-
-newFillerInput.addEventListener('input', () => {
-    addBtn.disabled = !newFillerInput.value.trim();
-});
 
 function renderSpeakerList() {
   speakerList.innerHTML = '';
@@ -106,7 +118,6 @@ function capitalizeFirstLetter(str) {
     return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
 }
 
-// ✅ Reusable table insert logic
 function addWordToFillerTable(fillerName) {
     const tableBody = document.querySelector('#fillerTable tbody');
     const existingRows = tableBody.querySelectorAll('tr');
@@ -139,7 +150,6 @@ function addWordToFillerTable(fillerName) {
     document.getElementById('recordLogs').disabled = false;
 }
 
-// ✅ Keeps your original manual Add logic intact
 function addToFillerTable() {
     const fillerInput = document.getElementById('newFiller');
     const fillerName = fillerInput.value.trim();;
@@ -153,7 +163,6 @@ function resetFillerTable() {
     tableBody.innerHTML = '';   // ✅ Clears all rows
     document.getElementById('recordLogs').disabled = true;
 }
-
 
 function recordSpeechLogs() {
     const speakerName = document.getElementById('speakerName').value.trim();
@@ -189,16 +198,3 @@ function recordSpeechLogs() {
     document.getElementById('recordLogs').disabled = true;
 }
 
-// ✅ Enter key support for New Filler input
-document.addEventListener('DOMContentLoaded', function() {
-    const fillerInput = document.getElementById('newFiller');
-    const addButton = document.getElementById('addBtn');
-    fillerInput.addEventListener('keydown', function(event) {
-        if (event.key === 'Enter') {
-            event.preventDefault();
-            if (!addButton.disabled) {
-                addButton.click();
-            }
-        }
-    });
-});

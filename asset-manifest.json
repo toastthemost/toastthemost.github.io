@@ -1,13 +1,13 @@
 {
   "files": {
-    "main.css": "/toastthemost/static/css/main.e5cdda46.css",
-    "main.js": "/toastthemost/static/js/main.11789061.js",
-    "index.html": "/toastthemost/index.html",
-    "main.e5cdda46.css.map": "/toastthemost/static/css/main.e5cdda46.css.map",
-    "main.11789061.js.map": "/toastthemost/static/js/main.11789061.js.map"
+    "main.css": "/static/css/main.e5cdda46.css",
+    "main.js": "/static/js/main.b8767990.js",
+    "index.html": "/index.html",
+    "main.e5cdda46.css.map": "/static/css/main.e5cdda46.css.map",
+    "main.b8767990.js.map": "/static/js/main.b8767990.js.map"
   },
   "entrypoints": [
     "static/css/main.e5cdda46.css",
-    "static/js/main.11789061.js"
+    "static/js/main.b8767990.js"
   ]
 }

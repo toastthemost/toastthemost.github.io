@@ -16,7 +16,7 @@ const App = () => {
     const [speakersList, setSpeakersList] = useState([]);
     const [speechType, setSpeechType] = useState('');
     const [speakerName, setSpeakerName] = useState('');
-    const [selectedPage, setSelectedPage] = useState('timekeeper');
+    const [selectedPage, setSelectedPage] = useState('home');
 
     const renderFeedbackSection = () => {
         switch (selectedPage) {

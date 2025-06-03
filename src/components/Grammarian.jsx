@@ -78,7 +78,7 @@ const Grammarian = ({speakerKeyState, speakersListState, speechTypeState, speake
             if (speechTypeState.var !== '' && speakerNameState.var !== '') {
 
                 let usedWordOfDayText = usedWordOfDay ? 'Used' : 'Not Used';
-                let feedback = `---- ${speakerNameState.var} (${speechTypeState.var}) ----\nUsed Word of the Day: ${usedWordOfDayText}\nQuotes\\Thoughts\\Words\\Sayings: ${collectedQuotes}\nImproper Grammer/Language use: ${collectedImproperUsage}\nOverall Grammer and Language: ${overallGrammer}\nComments: ${commentsValue}\n`;
+                let feedback = `---- ${speakerNameState.var} (${speechTypeState.var}) ----\nWord of the Day: ${usedWordOfDayText}\nQuotes\\Thoughts\\Words\\Sayings: ${collectedQuotes}\nImproper Grammer/Language use: ${collectedImproperUsage}\nOverall Grammer and Language: ${overallGrammer}\nComments: ${commentsValue}\n`;
 
                 setLogs(prevLogs => prevLogs + feedback + '\n')
 

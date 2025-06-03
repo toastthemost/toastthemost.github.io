@@ -28,13 +28,13 @@ export const Home = () => {
             title: 'Grammarian',
             description: 'Note word choices, grammar, and effective language use.',
             button_text: 'Launch App'
-        },
-        {
-            src: '/images/ge.jpg',
-            title: 'General Evaluator',
-            description: 'Manage feedback flow, summarize insights, and elevate the club.',
-            button_text: 'Launch App'
         }
+        // {
+        //     src: '/images/ge.jpg',
+        //     title: 'General Evaluator',
+        //     description: 'Manage feedback flow, summarize insights, and elevate the club.',
+        //     button_text: 'Launch App'
+        // }
     ];
     return (
         <Carousel arrows autoplay adaptiveHeight effect="fade">
@@ -70,7 +70,6 @@ export const Home = () => {
                         <Paragraph style={{ maxWidth: '600px', color: 'white' }}>
                             {slide.description}
                         </Paragraph>
-                        <Button type="primary">{slide.button_text}</Button>
                     </div>
                 </div>
             ))}

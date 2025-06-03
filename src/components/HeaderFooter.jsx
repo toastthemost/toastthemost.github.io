@@ -33,7 +33,7 @@ const HeaderMenu = ({selectedKey, onMenuClick}) => {
 const FooterSection = () => {
     return (
         <Footer>
-            Toastmaster Apps ©{new Date().getFullYear()} Created by Toast The Most Fidelity Club A
+            Toastmasters Apps ©{new Date().getFullYear()} Created by Toast The Most Fidelity Club A
         </Footer>
     )
 };

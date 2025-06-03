@@ -17,7 +17,7 @@ import React, {useRef, useState} from "react";
 import {LogSection} from "./Logger";
 import {SpeakerSection} from "./SpeakersContent";
 
-const {Title, Text} = Typography;
+const {Title} = Typography;
 
 const min = {
     'Ice Breaker': 4 * 60000,

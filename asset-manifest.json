@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/toastthemost/static/css/main.e5cdda46.css",
+    "main.js": "/toastthemost/static/js/main.11789061.js",
+    "index.html": "/toastthemost/index.html",
+    "main.e5cdda46.css.map": "/toastthemost/static/css/main.e5cdda46.css.map",
+    "main.11789061.js.map": "/toastthemost/static/js/main.11789061.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e5cdda46.css",
+    "static/js/main.11789061.js"
+  ]
+}

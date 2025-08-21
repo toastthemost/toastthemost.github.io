@@ -9,6 +9,7 @@ const HeaderMenu = ({selectedKey, onMenuClick}) => {
         { key: 'ah_counter', label: 'Ah-Counter' },
         { key: 'timekeeper', label: 'Timekeeper' },
         { key: 'grammarian', label: 'Grammarian' },
+        { key: 'general_evaluator', label: 'General Evaluator' },
         { key: 'about', label: 'About', style: { marginLeft: 'auto' } },
     ];
     return (

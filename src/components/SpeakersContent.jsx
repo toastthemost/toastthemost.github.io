@@ -6,80 +6,66 @@ import {cardStyle, buttonIconStyle, tableIconStyle} from '../styles/styles';
 
 const {Title, Text} = Typography;
 
-
 const SpeakerSection = ({speakerKeyState, speakersListState, speechTypeState, speakerNameState}) => {
     const [messageApi, contextHolder] = message.useMessage();
 
     const [retrievedSpeechType, setRetrievedSpeechType] = useState('Ice Breaker');
     const handleSpeechTypeSelectChange = (value) => {
         setRetrievedSpeechType(value);
-    }
+    };
 
     const [retrievedSpeakerValue, setRetrievedSpeakerValue] = useState('');
     const handleSpeakerInputChange = (input) => {
         setRetrievedSpeakerValue(input.target.value);
     };
+
+    // Helper function to update current speech details and show success message.
+    const updateCurrentSpeech = (type, speaker, successMsg) => {
+        speechTypeState.func(type);
+        speakerNameState.func(speaker);
+        messageApi.open({type: 'success', content: successMsg});
+    };
+
     const handleUpdateButton = () => {
         if (retrievedSpeakerValue !== '') {
-            speechTypeState.func(retrievedSpeechType);
-            speakerNameState.func(retrievedSpeakerValue);
+            updateCurrentSpeech(retrievedSpeechType, retrievedSpeakerValue, "Updated Current Speech");
             setRetrievedSpeakerValue('');
-            messageApi.open({
-                type: 'success', content: "Updated Current Speech",
-            });
         } else {
-            messageApi.open({
-                type: 'error', content: "Missing Speaker's Name !!",
-            });
+            messageApi.open({type: 'error', content: "Missing Speaker's Name !!"});
         }
-
-    }
-
+    };
 
     const handleAddButton = () => {
         if (retrievedSpeakerValue !== '') {
-            speakersListState.func(prevList => [...prevList, {
-                key: speakerKeyState.var.toString(), speechType: retrievedSpeechType, speaker: retrievedSpeakerValue,
-            }]);
+            speakersListState.func(prevList => [
+                ...prevList,
+                {key: speakerKeyState.var.toString(), speechType: retrievedSpeechType, speaker: retrievedSpeakerValue}
+            ]);
             speakerKeyState.func(key => key + 1);
+            updateCurrentSpeech(retrievedSpeechType, retrievedSpeakerValue, "Speaker's Info added to the List");
             setRetrievedSpeakerValue('');
-            messageApi.open({
-                type: 'success', content: "Speaker's Info added to the List",
-            });
         } else {
-            messageApi.open({
-                type: 'error', content: "Missing Speaker's Name !!",
-            });
+            messageApi.open({type: 'error', content: "Missing Speaker's Name !!"});
         }
-    }
+    };
 
     const handleDelete = (key) => {
         speakersListState.func(prevData => prevData.filter(item => item.key !== key));
-        messageApi.open({
-            type: 'warning', content: "Speaker Removed!",
-        });
+        messageApi.open({type: 'warning', content: "Speaker Removed!"});
     };
 
     const handleInsert = (key) => {
         speakersListState.func(prevData => {
             const itemToInsert = prevData.find(item => item.key === key);
-
             if (itemToInsert) {
                 const {speechType, speaker} = itemToInsert;
-
-                speechTypeState.func(speechType);
-                speakerNameState.func(speaker);
-
+                updateCurrentSpeech(speechType, speaker, "Updated Current Speech from List");
                 const newList = prevData.filter(item => item.key !== key);
-                messageApi.open({
-                    type: 'success', content: "Updated Current Speech from List",
-                });
                 return newList;
             }
             return prevData;
-        })
+        });
     };
-
 
     return (
         <Col className="gutter-row" span={6}>

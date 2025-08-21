@@ -1,8 +1,9 @@
-import {Typography, Flex, Descriptions, Divider, Row, Col, Checkbox, Space, Input, Button, Radio, message} from 'antd';
+import {Typography, Flex, Descriptions, Divider, Row, Col, Checkbox, Space, Input, Button, Radio, message, FloatButton, Tooltip } from 'antd';
 import {cardStyle} from '../styles/styles';
 import React, {useState} from "react";
 import {LogSection} from "./Logger";
 import {SpeakerSection} from "./SpeakersContent";
+import { QuestionCircleOutlined } from '@ant-design/icons';
 
 const {Title, Text} = Typography;
 const {TextArea} = Input;
@@ -22,56 +23,46 @@ const Grammarian = ({speakerKeyState, speakersListState, speechTypeState, speake
         };
 
         const [retrievedQuotesValue, setRetrievedQuotesValue] = useState('');
-        const handleQuotesInputChange = (input) => {
-            setRetrievedQuotesValue(input.target.value);
-        };
         const [collectedQuotes, setCollectedQuotesValues] = useState('');
-        const handleQuotesButton = () => {
-            if (retrievedQuotesValue !== '') {
-                if (collectedQuotes === '') {
-                    setCollectedQuotesValues(retrievedQuotesValue);
-                } else {
-                    setCollectedQuotesValues(collectedQuotes + '; ' + retrievedQuotesValue);
-                }
-                setRetrievedQuotesValue('')
-            }
-        }
-
         const [retrievedImproperValue, setRetrievedImproperValue] = useState('');
-        const handleImproperInputChange = (input) => {
-            setRetrievedImproperValue(input.target.value);
-        };
         const [collectedImproperUsage, setCollectedImproperUsage] = useState('');
-        const handleImproperUsageButton = () => {
-            if (retrievedImproperValue !== '') {
-                if (collectedImproperUsage === '') {
-                    setCollectedImproperUsage(retrievedImproperValue);
-                } else {
-                    setCollectedImproperUsage(collectedImproperUsage + '; ' + retrievedImproperValue);
-                }
-                setRetrievedImproperValue('')
-            }
-        }
-
         const [overallGrammer, setOverallGrammer] = useState('');
+        const [commentsValue, setCommentsValue] = useState('');
+
+        // Helper function to add an item to a collected list.
+        const addItem = (value, collected, setCollected, setRetrieved) => {
+            if (value !== '') {
+                setCollected(collected === '' ? value : collected + '; ' + value);
+                setRetrieved('');
+            }
+        };
+
+        // Updated to use addItem helper.
+        const handleQuotesButton = () => {
+            addItem(retrievedQuotesValue, collectedQuotes, setCollectedQuotesValues, setRetrievedQuotesValue);
+        };
+
+        const handleImproperUsageButton = () => {
+            addItem(retrievedImproperValue, collectedImproperUsage, setCollectedImproperUsage, setRetrievedImproperValue);
+        };
+
         const handleOverallGrammerChange = (input) => {
             setOverallGrammer(input.target.value);
-        }
+        };
 
-        const [commentsValue, setCommentsValue] = useState('');
         const handleCommentsInput = (input) => {
             setCommentsValue(input.target.value);
         };
 
         const handleResetFeedbackButton = () => {
             setUsedWordOfDay(false);
-            setRetrievedImproperValue('')
+            setRetrievedImproperValue('');
             setCollectedImproperUsage('');
             setRetrievedQuotesValue('');
             setCollectedQuotesValues('');
             setOverallGrammer(null);
             setCommentsValue('');
-        }
+        };
 
         const [logs, setLogs] = useState('');
         const handleLogFeedbackButton = () => {
@@ -95,13 +86,14 @@ const Grammarian = ({speakerKeyState, speakersListState, speechTypeState, speake
         return (
             <Row align="center" gutter={24} style={{marginTop: 32}}>
                 {contextHolder}
+                <FloatButton tooltip="Start tour" icon={<QuestionCircleOutlined />} type="primary" style={{ insetInlineEnd: 24 }} />
                 <SpeakerSection
                     speakerKeyState={speakerKeyState}
                     speakersListState={speakersListState}
                     speechTypeState={speechTypeState}
                     speakerNameState={speakerNameState}
                 />
-                <Col className="gutter-row" span={12}>
+                <Col xs={24} md={12}>
                     <Row>
                         <div style={cardStyle}>
                             <Title level={4}>Current Speech</Title>
@@ -135,7 +127,7 @@ const Grammarian = ({speakerKeyState, speakersListState, speechTypeState, speake
                                                 <Input
                                                     placeholder="Input text and Hit Enter to add"
                                                     value={retrievedQuotesValue}
-                                                    onChange={handleQuotesInputChange}
+                                                    onChange={e => setRetrievedQuotesValue(e.target.value)}
                                                     onPressEnter={handleQuotesButton}
                                                 />
                                                 <Button type='primary' onClick={handleQuotesButton}>Add</Button>
@@ -152,7 +144,7 @@ const Grammarian = ({speakerKeyState, speakersListState, speechTypeState, speake
                                                 <Input
                                                     placeholder="Input text and Hit Enter to add"
                                                     value={retrievedImproperValue}
-                                                    onChange={handleImproperInputChange}
+                                                    onChange={e => setRetrievedImproperValue(e.target.value)}
                                                     onPressEnter={handleImproperUsageButton}
                                                 />
                                                 <Button type='primary' onClick={handleImproperUsageButton}>Add</Button>

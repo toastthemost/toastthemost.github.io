@@ -6,6 +6,7 @@ import {AhCounter} from './components/AhCounter';
 import {Timekeeper} from './components/Timekeeper';
 import {Home} from './components/Home';
 import {About} from './components/About';
+import {GeneralEvaluator} from "./components/GeneralEvaluator";
 
 const {Content} = Layout;
 
@@ -43,6 +44,8 @@ const App = () => {
                     speechTypeState={{var: speechType, func: setSpeechType}}
                     speakerNameState={{var: speakerName, func: setSpeakerName}}
                 />;
+            case 'general_evaluator':
+                return <GeneralEvaluator/>;
             case 'about':
                 return <About/>
             default:
@@ -55,8 +58,8 @@ const App = () => {
             <HeaderMenu selectedKey={selectedPage} onMenuClick={setSelectedPage}/>
             {
                 selectedPage === 'home'
-                ? <div>{renderFeedbackSection()}</div>
-                : <div><Content style={{padding: '0 48px'}}>{renderFeedbackSection()}</Content></div>
+                ? <div style={{marginTop: 60}}>{renderFeedbackSection()}</div>
+                : <div style={{marginTop: 60}}><Content style={{padding: '0 48px'}}>{renderFeedbackSection()}</Content></div>
             }
             <FooterSection/>
         </Layout>

@@ -22,33 +22,25 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
 
     const [fillerList, setFillerList] = useState([]);
 
-    const handleIncrement = (key) => {
-        setFillerList(prevList => prevList.map(item => item.key === key ? {...item, count: item.count + 1} : item));
-    }
+    // Helper function to add a filler
+    const addFiller = (filler) => {
+        if (!filler) return;
+        setFillerList(prevList => {
+            const existing = prevList.find(item => item.key === filler);
+            return existing
+              ? prevList.map(item => item.key === filler ? {...item, count: item.count + 1} : item)
+              : [...prevList, { key: filler, filler: filler, count: 1 }];
+        });
+    };
 
     const handleAddFillerButton = () => {
-        const fillerExists = fillerList.find(item => item.key === retrievedCustomFiller);
-        if (fillerExists) {
-            handleIncrement(retrievedCustomFiller);
-        } else {
-            setFillerList(prevList => [...prevList, {
-                key: retrievedCustomFiller, filler: retrievedCustomFiller, count: 1
-            }]);
-        }
+        addFiller(retrievedCustomFiller);
+        setRetrievedCustomFiller('');
+    };
 
-        setRetrievedCustomFiller('')
-    }
-
-    const handleLibraryButton = buttonKey => {
-        const fillerExists = fillerList.find(item => item.key === buttonKey);
-        if (fillerExists) {
-            handleIncrement(buttonKey);
-        } else {
-            setFillerList(prevList => [...prevList, {
-                key: buttonKey, filler: buttonKey, count: 1
-            }]);
-        }
-    }
+    const handleLibraryButton = (buttonKey) => {
+        addFiller(buttonKey);
+    };
 
     const vocalPausesButtons = [
         {pause: 'Um', span: 6},
@@ -179,7 +171,7 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
                                     align: 'center',
                                     render: (_, record) => (<PlusCircleTwoTone
                                         style={tableIconStyle}
-                                        onClick={() => handleIncrement(record.key)}
+                                        onClick={() => addFiller(record.key)}
                                     />),
                                 }]}/>
                             <Col span={10}>

@@ -1,6 +1,9 @@
 const headerStyle = {
     display: 'flex',
-    alignItems: 'center'
+    alignItems: 'center',
+    position: 'fixed',
+    zIndex: 1000,
+    width: '100%',
 }
 
 const cardStyle = {

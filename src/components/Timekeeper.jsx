@@ -71,13 +71,11 @@ export const Timekeeper = ({speakerKeyState, speakersListState, speechTypeState,
     };
 
     const timer = useRef(null);
-    let startTime = null;
-    let minShown = false;
-    let midShown = false;
-    let maxShown = false;
-    let withinTime = "Yes";
+    const startTimeRef = useRef(null);
+    const minShownRef = useRef(false);
+    const midShownRef = useRef(false);
+    const maxShownRef = useRef(false);
     const elapsedRef = useRef(0);
-
 
     const [timerDisplay, setTimerDisplay] = useState('0:00');
     const [strokeColor, setStrokeColor] = useState(blue[5])
@@ -86,13 +84,16 @@ export const Timekeeper = ({speakerKeyState, speakersListState, speechTypeState,
 
     const handleStartButton = () => {
         if (speechTypeState.var !== '' && speakerNameState.var !== '') {
-
-            startTime = Date.now();
-            const fullGraceTime = max[speechTypeState.var] + 15000
+            startTimeRef.current = Date.now();
+            // Reset flag refs on start
+            minShownRef.current = false;
+            midShownRef.current = false;
+            maxShownRef.current = false;
+            const fullGraceTime = max[speechTypeState.var] + 15000;
             setSpeechInProgress(true);
 
             timer.current = setInterval(() => {
-                const elapsed = Date.now() - startTime;
+                const elapsed = Date.now() - startTimeRef.current;
                 elapsedRef.current = elapsed;
 
                 const minutes = Math.floor(elapsed / 60000);
@@ -101,19 +102,18 @@ export const Timekeeper = ({speakerKeyState, speakersListState, speechTypeState,
 
                 setPercentage(elapsed * 100 / fullGraceTime);
 
-
-                if (elapsed >= max[speechTypeState.var] && !maxShown) {
-                    setStrokeColor(red[5])
-                    showRed('error')
-                    maxShown = true;
-                } else if (elapsed >= mid[speechTypeState.var] && !midShown) {
-                    setStrokeColor(yellow[5])
-                    showYellow('warning')
-                    midShown = true;
-                } else if (elapsed >= min[speechTypeState.var] && !minShown) {
-                    setStrokeColor(green[5])
-                    showGreen('success')
-                    minShown = true;
+                if (elapsed >= max[speechTypeState.var] && !maxShownRef.current) {
+                    setStrokeColor(red[5]);
+                    showRed('error');
+                    maxShownRef.current = true;
+                } else if (elapsed >= mid[speechTypeState.var] && !midShownRef.current) {
+                    setStrokeColor(yellow[5]);
+                    showYellow('warning');
+                    midShownRef.current = true;
+                } else if (elapsed >= min[speechTypeState.var] && !minShownRef.current) {
+                    setStrokeColor(green[5]);
+                    showGreen('success');
+                    minShownRef.current = true;
                 }
 
             }, 1000)
@@ -126,19 +126,16 @@ export const Timekeeper = ({speakerKeyState, speakersListState, speechTypeState,
     const handleStopButton = () => {
         clearInterval(timer.current);
         const elapsed = elapsedRef.current;
-
         setSpeechInProgress(false);
-        console.log(elapsed)
-        if (elapsed >= max[speechTypeState.var] || elapsed < min[speechTypeState.var]) {
-            withinTime = "No";
-        }
+        // Compute withinTime status based on elapsed time
+        const withinTime = (elapsed < min[speechTypeState.var] || elapsed >= max[speechTypeState.var]) ? "No" : "Yes";
 
         let feedback = `${speakerNameState.var} (${speechTypeState.var}) : ${timerDisplay} | Within Time: ${withinTime}`;
-        setLogs(prevLogs => prevLogs + feedback + '\n')
+        setLogs(prevLogs => prevLogs + feedback + '\n');
 
         setTimerDisplay('0:00');
         setPercentage(0);
-        setStrokeColor(blue[5])
+        setStrokeColor(blue[5]);
         speechTypeState.func('');
         speakerNameState.func('');
         messageApi.open({type: 'warning', content: "Timer Stopped !!"});

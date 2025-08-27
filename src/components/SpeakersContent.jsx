@@ -68,7 +68,7 @@ const SpeakerSection = ({speakerKeyState, speakersListState, speechTypeState, sp
     };
 
     return (
-        <Col className="gutter-row" span={6}>
+        <Col className="gutter-row" xs={24} md={24} lg={6}>
             <div style={cardStyle}>
                 {contextHolder}
                 <Title level={5}>Speaker's Info</Title>
@@ -105,6 +105,8 @@ const SpeakerSection = ({speakerKeyState, speakersListState, speechTypeState, sp
                         dataSource={speakersListState.var}
                         pagination={false}
                         size="small"
+                        style={{ width: '100%' }}
+                        scroll={{ x: true }}
                         columns={[{
                             title: 'Speech Type', dataIndex: 'speechType', key: 'speechType',
                         }, {

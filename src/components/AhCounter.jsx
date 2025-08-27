@@ -1,5 +1,5 @@
 import {
-    Typography, Flex, Descriptions, Divider, Row, Col, Space, Input, Button, message, Table
+    Typography, Flex, Descriptions, Divider, Row, Col, Space, Input, Button, message, Table, Grid
 } from 'antd';
 import {cardStyle, tableIconStyle} from '../styles/styles';
 import React, {useState} from "react";
@@ -13,6 +13,7 @@ const {TextArea} = Input;
 
 
 const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speakerNameState}) => {
+    const screens = Grid.useBreakpoint();
     const [messageApi, contextHolder] = message.useMessage();
 
     const [retrievedCustomFiller, setRetrievedCustomFiller] = useState('');
@@ -48,7 +49,7 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
         {pause: 'Er', span: 6},
         {pause: 'Hm', span: 6},
         {pause: 'Long Pause', span: 24}
-    ].map(item => <Col span={item.span}><Button
+    ].map(item => <Col xs={12} sm={8} md={item.span} lg={item.span}><Button
         key={item.pause.toLowerCase()}
         color="cyan"
         variant="solid"
@@ -67,7 +68,7 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
         {word: 'Actually', span: 8},
         {word: 'Basically', span: 8},
         {word: 'Literally', span: 8}
-    ].map(item => <Col span={item.span}><Button
+    ].map(item => <Col xs={12} sm={8} md={item.span} lg={item.span}><Button
         key={item.word.toLowerCase()}
         color="purple"
         variant="solid"
@@ -80,7 +81,7 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
         {phrase: 'I mean', span: 12},
         {phrase: 'Kind of', span: 12},
         {phrase: 'Sort of', span: 12},
-    ].map(item => <Col span={item.span}><Button
+    ].map(item => <Col xs={12} sm={12} md={item.span} lg={item.span}><Button
         key={item.phrase.toLowerCase()}
         color="gold"
         variant="solid"
@@ -118,7 +119,7 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
     }
 
 
-    return (<Row align="center" gutter={24} style={{marginTop: 32}}>
+    return (<Row justify="center" align="top" gutter={[16, 24]} style={{marginTop: 32}}>)
         {contextHolder}
         <SpeakerSection
             speakerKeyState={speakerKeyState}
@@ -126,7 +127,7 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
             speechTypeState={speechTypeState}
             speakerNameState={speakerNameState}
         />
-        <Col className="gutter-row" span={10}>
+        <Col className="gutter-row" xs={24} md={14} lg={10}>
             <Row>
                 <div style={cardStyle}>
                     <Title level={4}>Current Speech</Title>
@@ -142,25 +143,27 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
                                 <Text type="strong">Add Custom Fillers :</Text>
                             </Col>
                             <Col span={14}>
-                                <Flex gap="small" vertical>
-                                    <Space.Compact style={{width: '100%'}}>
-                                        <Input
-                                            placeholder="Input text and Hit Enter to add"
-                                            value={retrievedCustomFiller}
-                                            onChange={handleCustomFillerInputChange}
-                                            onPressEnter={handleAddFillerButton}
-                                        />
-                                        <Button type='primary'
-                                                onClick={handleAddFillerButton}
-                                        >Add</Button>
-                                    </Space.Compact>
+                                <Flex gap="small" vertical={screens.xs}>
+                                    <Input
+                                        placeholder="Input text and Hit Enter to add"
+                                        value={retrievedCustomFiller}
+                                        onChange={handleCustomFillerInputChange}
+                                        onPressEnter={handleAddFillerButton}
+                                        style={{ width: '100%' }}
+                                    />
+                                    <Button type='primary'
+                                            onClick={handleAddFillerButton}
+                                            block={screens.xs}
+                                    >Add</Button>
                                 </Flex>
                             </Col>
+                            <Col span={24}>
                             <Table
                                 dataSource={fillerList}
                                 pagination={false}
                                 style={{width: '100%'}}
                                 size="small"
+                                scroll={{ x: true }}
                                 columns={[{
                                     title: 'Filler', dataIndex: 'filler', key: 'filler'
                                 }, {
@@ -174,6 +177,7 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
                                         onClick={() => addFiller(record.key)}
                                     />),
                                 }]}/>
+                            </Col>
                             <Col span={10}>
                                 <Text type="strong">Overall Comments :</Text>
                             </Col>
@@ -188,15 +192,17 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
                                 </Flex>
                             </Col>
                         </Row>
-                        <Row justify="space-between">
+                        <Flex justify="space-between" gap="small" wrap vertical={screens.xs}>
                             <Button type='primary' danger
                                     onClick={handleResetFeedbackButton}
+                                    block={screens.xs}
                             >Reset Feedback</Button>
                             <Button
                                 type='primary'
                                 onClick={handleLogFeedbackButton}
+                                block={screens.xs}
                             >Log Feedback</Button>
-                        </Row>
+                        </Flex>
                     </Flex>
                 </div>
             </Row>
@@ -204,7 +210,7 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
                 <LogSection page={"ahcounter"} logs={logs} setLogs={setLogs}/>
             </Row>
         </Col>
-        <Col className="gutter-row" span={6}>
+        <Col className="gutter-row" xs={24} md={10} lg={6}>
             <div style={cardStyle}>
                 <Title level={5}>Fillers Library</Title>
                 <Text type="secondary">Use this section to add common fillers during speech</Text>

@@ -27,13 +27,19 @@ const imageSlides = [
         title: 'Grammarian',
         description: 'Note word choices, grammar, and effective language use.',
         button_text: 'Launch App'
+    },
+    {
+        src: '/images/ge.jpg',
+        title: 'General Evaluator',
+        description: 'Provides general feedback to help improving overall meeting',
+        button_text: 'Launch App'
     }
     // ...existing commented slides...
 ];
 
 // Helper component to render a slide
 const Slide = ({ src, title, description /*, button_text*/ }) => (
-    <div style={{ position: 'relative', height: '600px', marginTop: 20 }}>
+    <div style={{ position: 'relative', height: '600px'}}>
         <img
             src={src}
             alt={title}

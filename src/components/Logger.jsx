@@ -1,5 +1,5 @@
 import React from "react";
-import {Typography, Input, Flex, Row, Button, message} from "antd";
+import {Typography, Input, Flex, Row, Button, message, Grid} from "antd";
 import {saveAs} from 'file-saver';
 
 const {Title} = Typography;
@@ -7,6 +7,7 @@ const {TextArea} = Input;
 
 export const LogSection = ({page, logs, setLogs}) => {
     const [messageApi, contextHolder] = message.useMessage();
+    const screens = Grid.useBreakpoint();
 
     // Helper function to show messages
     const showMessage = (type, content) => {
@@ -46,10 +47,12 @@ export const LogSection = ({page, logs, setLogs}) => {
                 value={logs}
                 onChange={handleLogSectionChange}
             />
-            <Row justify="space-between">
-                <Button danger onClick={handleResetLogsButton}>Reset Logs</Button>
-                <Button onClick={handleExportButton}>Export Logs</Button>
-            </Row>
+            <Flex justify="space-between" gap="middle" wrap>
+                <Button danger onClick={handleResetLogsButton}
+                        style={{minWidth: '120px'}}>Reset Logs</Button>
+                <Button onClick={handleExportButton}
+                        style={{minWidth: '120px'}}>Export Logs</Button>
+            </Flex>
         </Flex>
     )
 }

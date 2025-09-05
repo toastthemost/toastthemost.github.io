@@ -1,13 +1,15 @@
-import React, {useState} from 'react';
-import {Typography, Flex, Select, Input, Row, Button, Divider, Table, Space, message, Col} from 'antd';
+import React, {useState, forwardRef} from 'react';
+import {Typography, Flex, Select, Input, Row, Button, Divider, Table, Space, message, Col, Grid} from 'antd';
 
 import {MinusCircleTwoTone, PlusCircleTwoTone, RightCircleTwoTone} from '@ant-design/icons';
 import {cardStyle, buttonIconStyle, tableIconStyle} from '../styles/styles';
+import {SPEECH_TYPES} from '../constants/speechTiming';
 
 const {Title, Text} = Typography;
 
-const SpeakerSection = ({speakerKeyState, speakersListState, speechTypeState, speakerNameState}) => {
+const SpeakerSection = forwardRef(({speakerKeyState, speakersListState, speechTypeState, speakerNameState, style}, ref) => {
     const [messageApi, contextHolder] = message.useMessage();
+    const screens = Grid.useBreakpoint();
 
     const [retrievedSpeechType, setRetrievedSpeechType] = useState('Ice Breaker');
     const handleSpeechTypeSelectChange = (value) => {
@@ -68,7 +70,7 @@ const SpeakerSection = ({speakerKeyState, speakersListState, speechTypeState, sp
     };
 
     return (
-        <Col className="gutter-row" xs={24} md={24} lg={6}>
+        <Col className="gutter-row" xs={24} md={24} lg={6} style={{marginBottom: 24, ...style}} ref={ref}>
             <div style={cardStyle}>
                 {contextHolder}
                 <Title level={5}>Speaker's Info</Title>
@@ -78,24 +80,42 @@ const SpeakerSection = ({speakerKeyState, speakersListState, speechTypeState, sp
                         style={{width: '100%'}}
                         defaultValue="Ice Breaker"
                         onChange={handleSpeechTypeSelectChange}
-                        options={[{value: 'Ice Breaker', label: 'Ice Breaker'}, {
-                            value: 'Other Speech',
-                            label: 'Other Speech'
-                        }, {value: 'Table Topic', label: 'Table Topic'}, {value: 'Evaluation', label: 'Evaluation'},]}
+                        options={SPEECH_TYPES}
                     />
                     <Input placeholder="Enter Speaker's Name" onChange={handleSpeakerInputChange}
                            value={retrievedSpeakerValue}/>
-                    <Row justify="space-between" align="middle">
-                        <Button onClick={handleAddButton}>
-                            Add to List
-                            <PlusCircleTwoTone twoToneColor="#73d13d" style={buttonIconStyle}/>
-                        </Button>
-                        OR
-                        <Button onClick={handleUpdateButton}>
-                            Update
-                            <RightCircleTwoTone style={buttonIconStyle}/>
-                        </Button>
-                    </Row>
+                    {screens.xs ? (
+                        // Mobile layout - stacked buttons
+                        <Flex gap="small" vertical>
+                            <Button onClick={handleAddButton} block>
+                                Add to List
+                                <PlusCircleTwoTone twoToneColor="#73d13d" style={buttonIconStyle}/>
+                            </Button>
+                            <Button onClick={handleUpdateButton} block>
+                                Update
+                                <RightCircleTwoTone style={buttonIconStyle}/>
+                            </Button>
+                        </Flex>
+                    ) : (
+                        // Desktop layout - side by side with OR
+                        <Row gutter={16} align="middle">
+                            <Col flex="1">
+                                <Button onClick={handleAddButton} block>
+                                    Add to List
+                                    <PlusCircleTwoTone twoToneColor="#73d13d" style={buttonIconStyle}/>
+                                </Button>
+                            </Col>
+                            <Col>
+                                <Text type="secondary" style={{ fontSize: '14px', fontWeight: 'normal' }}>OR</Text>
+                            </Col>
+                            <Col flex="1">
+                                <Button onClick={handleUpdateButton} block>
+                                    Update
+                                    <RightCircleTwoTone style={buttonIconStyle}/>
+                                </Button>
+                            </Col>
+                        </Row>
+                    )}
                 </Flex>
                 <Divider/>
                 <Title level={5}>Speakers' List</Title>
@@ -127,6 +147,6 @@ const SpeakerSection = ({speakerKeyState, speakersListState, speechTypeState, sp
                 </Flex>
             </div>
         </Col>)
-};
+});
 
 export {SpeakerSection}

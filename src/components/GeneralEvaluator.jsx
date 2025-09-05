@@ -1,4 +1,4 @@
-import React, { useMemo, useState, useEffect } from 'react';
+import React, { useMemo, useState, useEffect, useRef } from 'react';
 import {
     Typography,
     Flex,
@@ -11,8 +11,11 @@ import {
     Button,
     Form,
     Grid,
+    Tour,
+    Affix,
 } from 'antd';
-import { UserDeleteOutlined, UserAddOutlined, PlusSquareOutlined, MinusSquareOutlined } from '@ant-design/icons';
+import { UserDeleteOutlined, UserAddOutlined, PlusSquareOutlined, MinusSquareOutlined, QuestionCircleOutlined } from '@ant-design/icons';
+import { saveAs } from 'file-saver';
 import { cardStyle } from '../styles/styles';
 
 const { Title, Text } = Typography;
@@ -28,7 +31,7 @@ function EditableText({ namePath }) {
                     onChange: (str) => form.setFieldValue(namePath, str),
                 }}
             >
-                {value ?? ''}
+                {value || 'Click to edit'}
             </Text>
         </Form.Item>
     );
@@ -135,7 +138,9 @@ function SectionPanel({ baseName, section, expandAll, expandSignal }) {
     const [active, setActive] = useState(section.key === 'beforeMeeting');
 
     useEffect(() => {
-        setActive(!!expandAll);
+        if (expandSignal > 0) {
+            setActive(!!expandAll);
+        }
     }, [expandSignal, expandAll]);
 
     const activeKey = active ? [section.key] : [];
@@ -154,8 +159,22 @@ function SectionPanel({ baseName, section, expandAll, expandSignal }) {
                     <Flex gap="small" vertical>
                         {section.fields.map((f) => (
                             f.type === 'checkbox' ? (
-                                <Form.Item key={f.name} name={[baseName, f.name]} valuePropName="checked" noStyle>
-                                    <Checkbox aria-label={f.label}>{f.label}</Checkbox>
+                                <Form.Item key={f.name} name={[baseName, f.name]} noStyle>
+                                    <Form.Item shouldUpdate noStyle>
+                                        {(form) => {
+                                            const value = form.getFieldValue([baseName, f.name]);
+                                            return (
+                                                <Checkbox 
+                                                    indeterminate={value === null}
+                                                    checked={value === true}
+                                                    onChange={(e) => form.setFieldValue([baseName, f.name], e.target.checked)}
+                                                    aria-label={f.label}
+                                                >
+                                                    {f.label}
+                                                </Checkbox>
+                                            );
+                                        }}
+                                    </Form.Item>
                                 </Form.Item>
                             ) : f.type === 'text' ? (
                                 <Flex key={f.name} gap="middle" align="center">
@@ -203,20 +222,56 @@ function SpeechEvaluator({ namePath }) {
         <Flex gap="small" vertical>
             <Flex gap="middle" align="center">
                 <Text strong>Evaluator:</Text>
-                <EditableText namePath={[...namePath, 'evaluator']} />
+                <EditableText namePath={['evaluations', ...namePath, 'evaluator']} />
             </Flex>
             <Flex gap="middle" align="center">
                 <Text strong>Speaker:</Text>
-                <EditableText namePath={[...namePath, 'speaker']} />
+                <EditableText namePath={['evaluations', ...namePath, 'speaker']} />
             </Flex>
-            <Form.Item name={[...namePath, 'usedCRC']} valuePropName="checked" noStyle>
-                <Checkbox>Used CRC Method?</Checkbox>
+            <Form.Item shouldUpdate noStyle>
+                {(form) => {
+                    const fieldPath = ['evaluations', ...namePath, 'usedCRC'];
+                    const value = form.getFieldValue(fieldPath);
+                    return (
+                        <Checkbox 
+                            indeterminate={value === null}
+                            checked={value === true}
+                            onChange={(e) => form.setFieldValue(fieldPath, e.target.checked)}
+                        >
+                            Used CRC Method?
+                        </Checkbox>
+                    );
+                }}
             </Form.Item>
-            <Form.Item name={[...namePath, 'actionableRecommendation']} valuePropName="checked" noStyle>
-                <Checkbox>Were recommendations specific and actionable?</Checkbox>
+            <Form.Item shouldUpdate noStyle>
+                {(form) => {
+                    const fieldPath = ['evaluations', ...namePath, 'actionableRecommendation'];
+                    const value = form.getFieldValue(fieldPath);
+                    return (
+                        <Checkbox 
+                            indeterminate={value === null}
+                            checked={value === true}
+                            onChange={(e) => form.setFieldValue(fieldPath, e.target.checked)}
+                        >
+                            Were recommendations specific and actionable?
+                        </Checkbox>
+                    );
+                }}
             </Form.Item>
-            <Form.Item name={[...namePath, 'withinTime']} valuePropName="checked" noStyle>
-                <Checkbox>Delivered evaluations within time?</Checkbox>
+            <Form.Item shouldUpdate noStyle>
+                {(form) => {
+                    const fieldPath = ['evaluations', ...namePath, 'withinTime'];
+                    const value = form.getFieldValue(fieldPath);
+                    return (
+                        <Checkbox 
+                            indeterminate={value === null}
+                            checked={value === true}
+                            onChange={(e) => form.setFieldValue(fieldPath, e.target.checked)}
+                        >
+                            Delivered evaluations within time?
+                        </Checkbox>
+                    );
+                }}
             </Form.Item>
             <Form.Item name={[...namePath, 'comments']} noStyle>
                 <TextArea placeholder="Add comments here" autoSize={{ minRows: 2, maxRows: 2 }} />
@@ -245,15 +300,68 @@ export function GeneralEvaluator() {
         setExpandSignalEvaluations(s => s + 1);
     };
 
+    // Tour functionality
+    const [isTourOpen, setIsTourOpen] = useState(false);
+    const meetingSectionsRef = useRef(null);
+    const rolesRef = useRef(null);
+    const evaluationsRef = useRef(null);
+    const speechEvaluationsRef = useRef(null);
+    const tagTeamRef = useRef(null);
+    const notesRef = useRef(null);
+    const actionButtonsRef = useRef(null);
+
+    const tourSteps = [
+        {
+            title: 'Welcome to General Evaluator! 📊',
+            description: 'This comprehensive tool helps you evaluate all aspects of a Toastmasters meeting systematically.',
+            target: null,
+        },
+        {
+            title: 'Meeting Sections',
+            description: 'Track meeting flow from setup to closing. Use the expand/collapse controls to manage sections efficiently.',
+            target: () => meetingSectionsRef.current,
+        },
+        {
+            title: 'Roles Assignment',
+            description: 'Record who filled each key role during the meeting. Click on any name to edit it directly.',
+            target: () => rolesRef.current,
+        },
+        {
+            title: 'Evaluations Panel',
+            description: 'Comprehensive evaluation tracking for all speeches and supporting roles during the meeting.',
+            target: () => evaluationsRef.current,
+        },
+        {
+            title: 'Speech Evaluations',
+            description: 'Add/remove speech evaluators and track their performance using the CRC method and timing.',
+            target: () => speechEvaluationsRef.current,
+        },
+        {
+            title: 'Tag Team Evaluation',
+            description: 'Evaluate supporting roles like Grammarian, Timekeeper, and Ah-Counter performance.',
+            target: () => tagTeamRef.current,
+        },
+        {
+            title: 'Notes & Export',
+            description: 'Generate structured observations, add personal notes, and export your complete evaluation.',
+            target: () => notesRef.current,
+        },
+        {
+            title: 'Action Buttons',
+            description: 'Use these controls to generate observations from your checkboxes, clear notes, or export your evaluation.',
+            target: () => actionButtonsRef.current,
+        },
+    ];
+
     const initialValues = useMemo(() => {
         const base = {
             roles: {
-                sergeantAtArms: 'Placeholder',
-                presidingOfficer: 'Placeholder',
-                toastmasterOfTheDay: 'Placeholder',
-                tableTopicsMaster: 'Placeholder',
+                sergeantAtArms: 'Click to edit',
+                presidingOfficer: 'Click to edit',
+                toastmasterOfTheDay: 'Click to edit',
+                tableTopicsMaster: 'Click to edit',
             },
-            evaluations: [{}], // start with one
+            evaluations: [{ evaluator: '', speaker: '', usedCRC: null, actionableRecommendation: null, withinTime: null, comments: '' }], // start with one
             notes: '', // Notes field
         };
         const allSectionKeys = [
@@ -261,7 +369,19 @@ export function GeneralEvaluator() {
             ...tagTeamSections.map(s => s.key),
             ...overallSections.map(s => s.key),
         ];
-        allSectionKeys.forEach(k => { base[k] = {}; });
+        // Initialize all checkbox fields to null (intermediate state)
+        allSectionKeys.forEach(k => { 
+            base[k] = {};
+            const currentSections = [...sections, ...tagTeamSections, ...overallSections];
+            const section = currentSections.find(s => s.key === k);
+            if (section) {
+                section.fields.forEach(field => {
+                    if (field.type === 'checkbox') {
+                        base[k][field.name] = null;
+                    }
+                });
+            }
+        });
         return base;
     }, []);
 
@@ -277,7 +397,7 @@ export function GeneralEvaluator() {
             } else if (question.startsWith("Were ")) {
                 statement = "✅ The " + question.slice(5).replace("?", "") + ".";
             } else {
-                statement = question.replace("?", "") + ".";
+                statement = "✅ " + question.replace("?", "") + ".";
             }
         } else {
             // Negative version
@@ -289,7 +409,7 @@ export function GeneralEvaluator() {
                 statement = "❌ The " + question.slice(5).replace("?", "") + ".";
             } else {
                 // For other types of questions, assume the subject is implied
-                statement = "❌ The " + question.replace("?", "") + ".";
+                statement = "❌ " + question.replace("?", "") + ".";
             }
         }
 
@@ -299,55 +419,66 @@ export function GeneralEvaluator() {
     // Function to generate structured notes content
     const generateNotesContent = () => {
         const values = form.getFieldsValue();
-        const positives = [];
-        const toImprove = [];
+        let content = '';
 
-        // Process Meeting Sections
-        sections.forEach(section => {
+        // Helper function to process a section
+        const processSection = (section, sectionValues) => {
+            const sectionPositives = [];
+            const sectionToImprove = [];
+            let sectionComments = '';
+
             section.fields.forEach(field => {
                 if (field.type === 'checkbox') {
-                    const value = values[section.key]?.[field.name];
+                    const value = sectionValues?.[field.name];
                     const positiveStatement = convertQuestionToStatement(field.label, true);
                     const negativeStatement = convertQuestionToStatement(field.label, false);
-                    if (value) {
-                        positives.push(`${positiveStatement}`);
-                    } else {
-                        toImprove.push(`${negativeStatement}`);
+                    if (value === true) {
+                        sectionPositives.push(`  ${positiveStatement}`);
+                    } else if (value === false) {
+                        sectionToImprove.push(`  ${negativeStatement}`);
+                    }
+                    // Skip undefined/null values (untouched checkboxes)
+                } else if (field.type === 'textarea' && field.name === 'comments') {
+                    const commentValue = sectionValues?.[field.name];
+                    if (commentValue && commentValue.trim() !== '') {
+                        sectionComments = commentValue.trim();
                     }
                 }
             });
+
+            // Add section content if there are observations or comments
+            if (sectionPositives.length > 0 || sectionToImprove.length > 0 || sectionComments) {
+                content += `--------------- ${section.header} ---------------\n`;
+                
+                if (sectionPositives.length > 0) {
+                    content += sectionPositives.join('\n') + '\n';
+                }
+                
+                if (sectionToImprove.length > 0) {
+                    content += sectionToImprove.join('\n') + '\n';
+                }
+                
+                if (sectionComments) {
+                    content += `Comments: ${sectionComments}\n`;
+                }
+                
+                content += '\n';
+            }
+        };
+
+        // Process Meeting Sections
+        sections.forEach(section => {
+            processSection(section, values[section.key]);
         });
 
         // Process Tag Team Sections
         tagTeamSections.forEach(section => {
-            section.fields.forEach(field => {
-                if (field.type === 'checkbox') {
-                    const value = values[section.key]?.[field.name];
-                    const positiveStatement = convertQuestionToStatement(field.label, true);
-                    const negativeStatement = convertQuestionToStatement(field.label, false);
-                    if (value) {
-                        positives.push(`${positiveStatement}`);
-                    } else {
-                        toImprove.push(`${negativeStatement}`);
-                    }
-                }
-            });
+            processSection(section, values[section.key]);
         });
 
         // Process Overall Sections
         overallSections.forEach(section => {
-            section.fields.forEach(field => {
-                if (field.type === 'checkbox') {
-                    const value = values[section.key]?.[field.name];
-                    const positiveStatement = convertQuestionToStatement(field.label, true);
-                    const negativeStatement = convertQuestionToStatement(field.label, false);
-                    if (value) {
-                        positives.push(`${positiveStatement}`);
-                    } else {
-                        toImprove.push(`${negativeStatement}`);
-                    }
-                }
-            });
+            processSection(section, values[section.key]);
         });
 
         // Process Evaluations
@@ -357,30 +488,53 @@ export function GeneralEvaluator() {
             withinTime: "Delivered evaluations within time?",
         };
 
-        values.evaluations.forEach(evaluation => {
-            Object.entries(evaluationCheckboxes).forEach(([fieldName, question]) => {
-                const value = evaluation[fieldName];
-                const positiveStatement = convertQuestionToStatement(question, true);
-                const negativeStatement = convertQuestionToStatement(question, false);
-                if (value) {
-                    positives.push(`${positiveStatement}`);
-                } else {
-                    toImprove.push(`${negativeStatement}`);
+        if (values.evaluations && Array.isArray(values.evaluations)) {
+            values.evaluations.forEach((evaluation, index) => {
+                if (evaluation) {
+                    const evaluationPositives = [];
+                    const evaluationToImprove = [];
+
+                    Object.entries(evaluationCheckboxes).forEach(([fieldName, question]) => {
+                        const value = evaluation[fieldName];
+                        const positiveStatement = convertQuestionToStatement(question, true);
+                        const negativeStatement = convertQuestionToStatement(question, false);
+                        if (value === true) {
+                            evaluationPositives.push(`  ${positiveStatement}`);
+                        } else if (value === false) {
+                            evaluationToImprove.push(`  ${negativeStatement}`);
+                        }
+                        // Skip undefined/null values (untouched checkboxes)
+                    });
+
+                    // Add evaluation content if there are observations or comments
+                    const evaluationComments = evaluation.comments && evaluation.comments.trim() !== '' 
+                        ? evaluation.comments.trim() 
+                        : '';
+                    
+                    if (evaluationPositives.length > 0 || evaluationToImprove.length > 0 || evaluationComments) {
+                        const evaluatorName = evaluation.evaluator || 'Evaluator';
+                        const speakerName = evaluation.speaker || 'Speaker';
+                        content += `--------------- Evaluation #${index + 1} (${evaluatorName}) ---------------\n`;
+                        if (evaluation.speaker && evaluation.speaker.trim() !== '') {
+                            content += `Speaker: ${speakerName}\n`;
+                        }
+                        
+                        if (evaluationPositives.length > 0) {
+                            content += evaluationPositives.join('\n') + '\n';
+                        }
+                        
+                        if (evaluationToImprove.length > 0) {
+                            content += evaluationToImprove.join('\n') + '\n';
+                        }
+                        
+                        if (evaluationComments) {
+                            content += `Comments: ${evaluationComments}\n`;
+                        }
+                        
+                        content += '\n';
+                    }
                 }
             });
-        });
-
-        // Build the content
-        let content = '';
-        if (positives.length > 0) {
-            content += '--------------- Positives ---------------\n';
-            content += positives.join('\n');
-            content += '\n';
-        }
-        if (toImprove.length > 0) {
-            content += '--------------- To Improve ---------------\n';
-            content += toImprove.join('\n');
-            content += '\n';
         }
 
         return content;
@@ -388,15 +542,65 @@ export function GeneralEvaluator() {
 
     // Handle button click
     const handleGenerateNotes = () => {
-        const newContent = generateNotesContent();
-        const currentNotes = form.getFieldValue('notes') || '';
-        form.setFieldsValue({notes: currentNotes + newContent});
+        try {
+            const newContent = generateNotesContent();
+            const currentNotes = form.getFieldValue('notes') || '';
+            const updatedNotes = currentNotes + (currentNotes ? '\n\n' : '') + newContent;
+            form.setFieldsValue({notes: updatedNotes});
+        } catch (error) {
+            console.error('Error generating notes:', error);
+            // You could add a notification here if needed
+        }
+    };
+
+    // Handle clear observations
+    const handleClearNotes = () => {
+        form.setFieldsValue({notes: ''});
+    };
+
+    // Handle export observations
+    const handleExportObservations = () => {
+        const notes = form.getFieldValue('notes') || '';
+        if (notes.trim() === '') {
+            // You could add a notification here if needed
+            return;
+        }
+        const blob = new Blob([notes], { type: 'text/plain;charset=utf-8' });
+        const currentDate = new Date().toISOString().split('T')[0];
+        saveAs(blob, `General_Evaluator_Observations_${currentDate}.txt`);
+    };
+
+    // Handle reset sections
+    const handleResetSections = () => {
+        form.resetFields();
     };
 
     return (
-        <Form form={form} layout="vertical" initialValues={initialValues} style={{ marginTop: 32 }}>
+        <>
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundImage: 'url(/images/ge.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                zIndex: 0
+            }}></div>
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                zIndex: 1
+            }}></div>
+            <Form form={form} layout="vertical" initialValues={initialValues} style={{ marginTop: 32, position: 'relative', zIndex: 2, flex: 1 }}>
             <Row gutter={[8, 16]} justify="center">
-                <Col xs={24} md={12} lg={8}>
+                <Col xs={24} md={12} lg={8} style={{marginBottom: 24}} ref={meetingSectionsRef}>
                     <div style={cardStyle}>
                         <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' }}>
                             <Title level={4} style={{ margin: 0 }}>Meeting Sections</Title>
@@ -408,7 +612,7 @@ export function GeneralEvaluator() {
                                 {expandAll ? 'Collapse All' : 'Expand All'}
                             </Button>
                         </div>
-                        <div style={{ marginBottom: 12 }}>
+                        <div style={{ marginBottom: 12 }} ref={rolesRef}>
                             <RolesEditor />
                         </div>
                         {/* General Sections */}
@@ -418,7 +622,7 @@ export function GeneralEvaluator() {
                     </div>
                 </Col>
 
-                <Col xs={24} md={12} lg={8}>
+                <Col xs={24} md={12} lg={8} style={{marginBottom: 24}} ref={evaluationsRef}>
                     <div style={cardStyle}>
                         <div style={{display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap'}}>
                             <Title level={4} style={{margin: 0}}>Evaluations</Title>
@@ -435,8 +639,8 @@ export function GeneralEvaluator() {
                             {(fields, { add, remove }) => (
                                 <>
                                     <Divider style={{ marginTop: 0, marginBottom: 8 }}>Speech Evaluations</Divider>
-                                    <Flex gap="small" wrap vertical={screens.xs} style={{ marginBottom: 8 }}>
-                                        <Button onClick={() => add()} icon={<UserAddOutlined />} block={screens.xs}>
+                                    <Flex gap="small" wrap vertical={screens.xs} style={{ marginBottom: 8 }} ref={speechEvaluationsRef}>
+                                        <Button onClick={() => add({ evaluator: '', speaker: '', usedCRC: null, actionableRecommendation: null, withinTime: null, comments: '' })} icon={<UserAddOutlined />} block={screens.xs}>
                                             Add Evaluation
                                         </Button>
                                         <Button
@@ -450,6 +654,7 @@ export function GeneralEvaluator() {
                                     </Flex>
 
                                     <Collapse
+                                        defaultActiveKey={fields.length > 0 ? [String(fields[0].key)] : []}
                                         items={fields.map((field, i) => ({
                                             key: String(field.key),
                                             label: `Evaluation # ${i + 1}`,
@@ -461,7 +666,7 @@ export function GeneralEvaluator() {
                             )}
                         </Form.List>
 
-                        <Divider style={{ marginTop: 12, marginBottom: 8 }}>Tag Team Evaluation</Divider>
+                        <Divider style={{ marginTop: 12, marginBottom: 8 }} ref={tagTeamRef}>Tag Team Evaluation</Divider>
 
                         {tagTeamSections.map(section => (
                             <SectionPanel
@@ -489,21 +694,66 @@ export function GeneralEvaluator() {
 
             {/* Notes Section */}
             <Row gutter={[8, 16]} justify="center">
-                <Col xs={16}>
+                <Col xs={24} md={16} ref={notesRef}>
                     <div style={cardStyle}>
                         <Flex gap={8} vertical>
+                            <Flex justify="space-between" gap="middle" wrap style={{marginBottom: 16}}>
+                                <Button type="primary" danger onClick={handleResetSections}
+                                        style={{minWidth: '120px'}}>Reset Sections</Button>
+                                <Button type="primary" onClick={handleGenerateNotes}
+                                        style={{minWidth: '120px'}}>Append Observations</Button>
+                            </Flex>
                             <Form.Item name="notes" noStyle>
                                 <TextArea
                                     placeholder="Add any additional notes here..."
-                                    autoSize={{minRows: 3, maxRows: 6}}
-                                    style={{width: '100%'}}
+                                    autoSize={{minRows: 3}}
+                                    style={{width: '100%', resize: 'vertical'}}
                                 />
                             </Form.Item>
-                            <Button type="primary" onClick={handleGenerateNotes}>Append Observations</Button>
+                            <Flex justify="space-between" gap="middle" wrap ref={actionButtonsRef}>
+                                <Button danger onClick={handleClearNotes}
+                                        style={{minWidth: '120px'}}>Clear Notes</Button>
+                                <Button onClick={handleExportObservations}
+                                        style={{minWidth: '120px'}}>Export Notes</Button>
+                            </Flex>
                         </Flex>
                     </div>
                 </Col>
             </Row>
         </Form>
+        
+        {/* Tour Button with Affix */}
+        <div style={{ 
+            position: 'absolute', 
+            right: screens.xs ? 16 : 24, 
+            top: 10,
+            zIndex: 1001 
+        }}>
+            <Affix offsetTop={10}>
+                <Button 
+                    shape="circle"
+                    type="primary" 
+                    size={screens.xs ? "middle" : "large"}
+                    icon={<QuestionCircleOutlined />}
+                    title="Start tour"
+                    onClick={() => setIsTourOpen(true)}
+                    style={{
+                        width: screens.xs ? 40 : 48,
+                        height: screens.xs ? 40 : 48,
+                        boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)'
+                    }}
+                />
+            </Affix>
+        </div>
+        
+        {/* Interactive Tour */}
+        <Tour
+            open={isTourOpen}
+            onClose={() => setIsTourOpen(false)}
+            steps={tourSteps}
+            type="primary"
+            zIndex={1002}
+        />
+        </>
     );
 }

@@ -1,9 +1,10 @@
 import {
-    Typography, Flex, Descriptions, Divider, Row, Col, Space, Input, Button, message, Table, Grid
+    Typography, Flex, Descriptions, Divider, Row, Col, Input, Button, message, Table, Grid, Collapse, Tour, Affix
 } from 'antd';
 import {cardStyle, tableIconStyle} from '../styles/styles';
-import React, {useState} from "react";
+import React, {useState, useRef} from "react";
 import {PlusCircleTwoTone} from '@ant-design/icons';
+import {HelpCircle} from 'lucide-react';
 import {LogSection} from "./Logger";
 import {SpeakerSection} from "./SpeakersContent";
 
@@ -101,6 +102,53 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
     }
 
     const [logs, setLogs] = useState('');
+    
+    // Tour functionality
+    const [isTourOpen, setIsTourOpen] = useState(false);
+    const speakerSectionRef = useRef(null);
+    const fillerButtonsRef = useRef(null);
+    const customFillerRef = useRef(null);
+    const fillerTableRef = useRef(null);
+    const feedbackRef = useRef(null);
+    const logsRef = useRef(null);
+
+    const tourSteps = [
+        {
+            title: 'Welcome to Ah-Counter! 🔊',
+            description: 'Track filler words, sounds, and pauses during Toastmasters speeches to help speakers improve.',
+            target: null,
+        },
+        {
+            title: 'Speaker Information',
+            description: 'Start by selecting the speaker and speech type you\'re tracking.',
+            target: () => speakerSectionRef.current,
+        },
+        {
+            title: 'Quick Filler Buttons',
+            description: 'Use these preset buttons to quickly track common filler words and sounds.',
+            target: () => fillerButtonsRef.current,
+        },
+        {
+            title: 'Custom Filler Words',
+            description: 'Add your own filler words that aren\'t in the preset list.',
+            target: () => customFillerRef.current,
+        },
+        {
+            title: 'Filler Count Table',
+            description: 'Track counts for each filler word. Click + to increment counts during the speech.',
+            target: () => fillerTableRef.current,
+        },
+        {
+            title: 'Feedback & Comments',
+            description: 'Add overall comments about the speaker\'s filler word usage and log your feedback.',
+            target: () => feedbackRef.current,
+        },
+        {
+            title: 'Meeting Logs',
+            description: 'Review all logged feedback and export or reset logs as needed.',
+            target: () => logsRef.current,
+        },
+    ];
     const handleLogFeedbackButton = () => {
         if (speechTypeState.var !== '' && speakerNameState.var !== '') {
             let feedback = `---- ${speakerNameState.var} (${speechTypeState.var}) ----\n${fillerList.map(item => `${item.filler}: ${item.count}`).join('; ')}\nComments: ${commentsValue}\n`;
@@ -119,17 +167,41 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
     }
 
 
-    return (<Row justify="center" align="top" gutter={[16, 24]} style={{marginTop: 32}}>)
+    return (
+        <>
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundImage: 'url(/images/ah_counter.jpg)',
+                backgroundSize: 'cover',
+                backgroundPosition: 'center',
+                backgroundRepeat: 'no-repeat',
+                zIndex: 0
+            }}></div>
+            <div style={{
+                position: 'fixed',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(255, 255, 255, 0.85)',
+                zIndex: 1
+            }}></div>
+            <Row justify="center" align="top" gutter={[16, 24]} style={{marginTop: 32, position: 'relative', zIndex: 2, flex: 1}}>
         {contextHolder}
         <SpeakerSection
             speakerKeyState={speakerKeyState}
             speakersListState={speakersListState}
             speechTypeState={speechTypeState}
             speakerNameState={speakerNameState}
+            ref={speakerSectionRef}
         />
         <Col className="gutter-row" xs={24} md={14} lg={10}>
-            <Row>
-                <div style={cardStyle}>
+            <Row style={{width: '100%'}}>
+                <div style={{...cardStyle, width: '100%'}}>
                     <Title level={4}>Current Speech</Title>
                     <Flex gap="large" vertical>
                         <Descriptions items={[{
@@ -139,25 +211,25 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
                         },]}/>
                         <Divider size='small'>Feedback</Divider>
                         <Row gutter={[0, 16]} justify="center" align="middle">
-                            <Col span={10}>
+                            <Col xs={24} sm={10}>
                                 <Text type="strong">Add Custom Fillers :</Text>
                             </Col>
-                            <Col span={14}>
-                                <Flex gap="small" vertical={screens.xs}>
+                            <Col xs={24} sm={14} ref={customFillerRef}>
+                                <Flex gap="small">
                                     <Input
                                         placeholder="Input text and Hit Enter to add"
                                         value={retrievedCustomFiller}
                                         onChange={handleCustomFillerInputChange}
                                         onPressEnter={handleAddFillerButton}
-                                        style={{ width: '100%' }}
+                                        style={{ flex: 1 }}
                                     />
                                     <Button type='primary'
                                             onClick={handleAddFillerButton}
-                                            block={screens.xs}
+                                            style={{minWidth: '80px', flexShrink: 0}}
                                     >Add</Button>
                                 </Flex>
                             </Col>
-                            <Col span={24}>
+                            <Col span={24} ref={fillerTableRef}>
                             <Table
                                 dataSource={fillerList}
                                 pagination={false}
@@ -192,37 +264,86 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
                                 </Flex>
                             </Col>
                         </Row>
-                        <Flex justify="space-between" gap="small" wrap vertical={screens.xs}>
+                        <Flex justify="space-between" gap="small" wrap ref={feedbackRef}>
                             <Button type='primary' danger
                                     onClick={handleResetFeedbackButton}
-                                    block={screens.xs}
+                                    style={{minWidth: '120px'}}
                             >Reset Feedback</Button>
                             <Button
                                 type='primary'
                                 onClick={handleLogFeedbackButton}
-                                block={screens.xs}
+                                style={{minWidth: '120px'}}
                             >Log Feedback</Button>
                         </Flex>
                     </Flex>
                 </div>
             </Row>
-            <Row>
+            <Row style={{width: '100%', marginTop: 16}} ref={logsRef}>
                 <LogSection page={"ahcounter"} logs={logs} setLogs={setLogs}/>
             </Row>
         </Col>
         <Col className="gutter-row" xs={24} md={10} lg={6}>
-            <div style={cardStyle}>
+            <div style={{...cardStyle, width: '100%'}}>
                 <Title level={5}>Fillers Library</Title>
                 <Text type="secondary">Use this section to add common fillers during speech</Text>
-                <Divider>Vocal Pauses</Divider>
-                <Row gutter={[8, 16]} justify="center">{vocalPausesButtons}</Row>
-                <Divider>Single Words</Divider>
-                <Row gutter={[8, 16]} justify="center">{singleWordsButtons}</Row>
-                <Divider>Phrases</Divider>
-                <Row gutter={[8, 16]} justify="center">{phrasesButtons}</Row>
+                <Collapse
+                    defaultActiveKey={screens.xs ? [] : ['1']}
+                    ghost
+                    items={[
+                        {
+                            key: '1',
+                            label: 'Show/Hide Fillers',
+                            children: (
+                                <div ref={fillerButtonsRef}>
+                                    <Divider>Vocal Pauses</Divider>
+                                    <Row gutter={[8, 16]} justify="center">{vocalPausesButtons}</Row>
+                                    <Divider>Single Words</Divider>
+                                    <Row gutter={[8, 16]} justify="center">{singleWordsButtons}</Row>
+                                    <Divider>Phrases</Divider>
+                                    <Row gutter={[8, 16]} justify="center">{phrasesButtons}</Row>
+                                </div>
+                            ),
+                        },
+                    ]}
+                />
             </div>
         </Col>
-    </Row>)
+    </Row>
+    
+    {/* Tour Button with Affix */}
+    <div style={{ 
+        position: 'absolute', 
+        right: screens.xs ? 16 : 24, 
+        top: 10,
+        zIndex: 1001 
+    }}>
+        <Affix offsetTop={10}>
+            <Button 
+                shape="circle"
+                type="primary" 
+                size={screens.xs ? "middle" : "large"}
+                icon={<HelpCircle size={screens.xs ? 16 : 20} />}
+                title="Start tour"
+                onClick={() => setIsTourOpen(true)}
+                style={{
+                    width: screens.xs ? 40 : 48,
+                    height: screens.xs ? 40 : 48,
+                    boxShadow: '0 4px 16px rgba(0, 0, 0, 0.15)'
+                }}
+            />
+        </Affix>
+    </div>
+    
+    {/* Interactive Tour */}
+    <Tour
+        open={isTourOpen}
+        onClose={() => setIsTourOpen(false)}
+        steps={tourSteps}
+        type="primary"
+        zIndex={1002}
+    />
+        </>
+    )
 }
 
 

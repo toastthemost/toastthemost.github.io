@@ -28,18 +28,50 @@ export const About = () => {
                 zIndex: 1
             }}></div>
             <Row justify="center" align="middle" gutter={[24, 24]} style={{marginTop: 32, position: 'relative', zIndex: 2, minHeight: 'calc(100vh - 120px)'}}>
-                <Col xs={24} sm={24} md={10} lg={10} xl={8}>
-                    <img alt="about us" src='/images/about_us.jpg' 
-                         style={{ 
-                             width: '100%', 
-                             height: 'auto',
-                             borderRadius: '16px',
-                             boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)'
-                         }} />
+                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <div style={{ 
+                        position: 'relative',
+                        width: '100%',
+                        height: '100%',
+                        minHeight: '500px',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}>
+                        <img alt="about us" src='/images/about_us.jpg' 
+                             style={{ 
+                                 width: '100%', 
+                                 height: '100%',
+                                 minHeight: '500px',
+                                 objectFit: 'cover',
+                                 borderRadius: '16px',
+                                 boxShadow: '0 8px 32px rgba(0, 0, 0, 0.12)'
+                             }} />
+                    </div>
                 </Col>
-                <Col xs={24} sm={24} md={14} lg={14} xl={16}>
-                    <div style={{...cardStyle, padding: '32px'}}>
-                        <Title level={2} style={{marginBottom: '24px', color: '#1677ff'}}>About Us</Title>
+                <Col xs={24} sm={24} md={12} lg={12} xl={12}>
+                    <div style={{...cardStyle, padding: '48px 32px'}}>
+                        <div style={{
+                            display: 'flex',
+                            alignItems: 'center',
+                            marginBottom: '32px',
+                            gap: '16px'
+                        }}>
+                            <img 
+                                src="/images/TTM.png" 
+                                alt="Toast The Most Logo" 
+                                style={{ 
+                                    height: '180px', 
+                                    width: '180px',
+                                    borderRadius: '50%',
+                                    objectFit: 'cover',
+                                    border: '6px solid #1677ff',
+                                    boxShadow: '0 20px 50px rgba(22, 119, 255, 0.4)',
+                                    flexShrink: 0
+                                }}
+                            />
+                            <Title level={2} style={{margin: 0, color: '#1677ff', textAlign: 'left', fontSize: 'clamp(24px, 3vw, 32px)'}}>About Us</Title>
+                        </div>
                         <Paragraph style={{ 
                             fontSize: 'clamp(14px, 2.5vw, 16px)',
                             lineHeight: 1.6,

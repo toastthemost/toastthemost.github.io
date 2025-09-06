@@ -1,5 +1,31 @@
 /* Modern styling and animations */
 
+/* Fix navbar menu selection highlight for 80px height */
+.ant-menu-horizontal {
+  line-height: 80px !important;
+}
+
+.ant-menu-horizontal > .ant-menu-item {
+  height: 80px !important;
+  line-height: 80px !important;
+}
+
+.ant-menu-horizontal > .ant-menu-item-selected {
+  border-bottom: 2px solid #1677ff !important;
+  height: 80px !important;
+  line-height: 80px !important;
+}
+
+.ant-menu-horizontal > .ant-menu-item-selected::after {
+  height: 80px !important;
+  bottom: 0 !important;
+}
+
+.ant-menu-horizontal > .ant-menu-item::after {
+  height: 80px !important;
+  bottom: 0 !important;
+}
+
 /* Global typography improvements and layout fixes */
 * {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;

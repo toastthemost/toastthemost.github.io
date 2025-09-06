@@ -1,6 +1,6 @@
 import React, {useState, Suspense, lazy} from 'react';
 import {Layout, ConfigProvider} from 'antd';
-import {BrowserRouter as Router, Routes, Route, useNavigate, useLocation} from 'react-router-dom';
+import {HashRouter as Router, Routes, Route, useNavigate, useLocation} from 'react-router-dom';
 import {HeaderMenu, FooterSection} from './components/HeaderFooter';
 import {Home} from './components/Home';
 import {Toaster} from 'react-hot-toast';
@@ -100,7 +100,7 @@ const AppContent = () => {
                     selectedKey={selectedPage} 
                     onMenuClick={handleMenuClick}
                 />
-                <Content style={{marginTop: 60, flex: '1 0 auto', display: 'flex', flexDirection: 'column'}}>
+                <Content style={{marginTop: 80, flex: '1 0 auto', display: 'flex', flexDirection: 'column'}}>
                     <div className="page-transition" style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
                         <Routes>
                             <Route path="/" element={<Home onNavigate={handleNavigate}/>} />

@@ -19,7 +19,6 @@ const HeaderMenu = ({selectedKey, onMenuClick}) => {
     }, []);
 
     const menuItems = [
-        { key: 'home', label: 'Home' },
         { key: 'ah_counter', label: 'Ah-Counter' },
         { key: 'timekeeper', label: 'Timekeeper' },
         { key: 'grammarian', label: 'Grammarian' },
@@ -42,7 +41,22 @@ const HeaderMenu = ({selectedKey, onMenuClick}) => {
         return (
             <>
                 <Header style={{...headerStyle, padding: '0 16px', display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <div style={{color: 'white', fontSize: '18px', fontWeight: 'bold'}}>{getAppName()}</div>
+                    <div style={{display: 'flex', alignItems: 'center', gap: '12px'}}>
+                        <img 
+                            src="/images/TTM.png" 
+                            alt="Toast The Most Logo" 
+                            style={{ 
+                                height: '60px', 
+                                width: '60px',
+                                borderRadius: '50%',
+                                objectFit: 'cover',
+                                cursor: 'pointer',
+                                border: '2px solid rgba(255, 255, 255, 0.1)',
+                            }}
+                            onClick={() => handleMenuClick('home')}
+                        />
+                        <div style={{color: 'white', fontSize: '18px', fontWeight: 'bold'}}>{getAppName()}</div>
+                    </div>
                     <Button
                         type="text"
                         icon={<MenuOutlined style={{color: 'white', fontSize: '20px'}} />}
@@ -74,16 +88,53 @@ const HeaderMenu = ({selectedKey, onMenuClick}) => {
 
     return (
         <Header style={{...headerStyle, display: 'flex', alignItems: 'center'}}>
+            <div style={{ display: 'flex', alignItems: 'center', marginRight: '24px' }}>
+                <img 
+                    src="/images/TTM.png" 
+                    alt="Toast The Most Logo" 
+                    style={{ 
+                        height: '70px', 
+                        width: '70px',
+                        borderRadius: '50%',
+                        objectFit: 'cover',
+                        cursor: 'pointer',
+                        border: '2px solid rgba(255, 255, 255, 0.1)',
+                        transition: 'all 0.3s ease',
+                    }}
+                    onClick={() => onMenuClick('home')}
+                    onMouseEnter={(e) => {
+                        e.target.style.transform = 'scale(1.1)';
+                        e.target.style.border = '2px solid rgba(255, 255, 255, 0.3)';
+                    }}
+                    onMouseLeave={(e) => {
+                        e.target.style.transform = 'scale(1)';
+                        e.target.style.border = '2px solid rgba(255, 255, 255, 0.1)';
+                    }}
+                />
+            </div>
             <Menu
                 theme="dark"
                 mode="horizontal"
-                style={{ flex: 1 }}
+                style={{ 
+                    flex: 1,
+                    height: '80px',
+                    lineHeight: '80px'
+                }}
                 selectedKeys={[selectedKey]}
                 onClick={({ key }) => onMenuClick(key)}
             >
                 {menuItems.map((item, index) => (
-                    <Menu.Item key={item.key} style={index === menuItems.length - 1 ? { marginLeft: 'auto' } : {}}>
-                        {item.label}
+                    <Menu.Item 
+                        key={item.key} 
+                        style={{
+                            height: '80px',
+                            lineHeight: '80px',
+                            display: 'flex',
+                            alignItems: 'center',
+                            ...(index === menuItems.length - 1 ? { marginLeft: 'auto' } : {})
+                        }}
+                    >
+                        <span style={{ lineHeight: 'normal' }}>{item.label}</span>
                     </Menu.Item>
                 ))}
             </Menu>

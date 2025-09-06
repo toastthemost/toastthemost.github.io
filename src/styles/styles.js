@@ -4,6 +4,8 @@ const headerStyle = {
     position: 'fixed',
     zIndex: 1000,
     width: '100%',
+    height: '80px',
+    padding: '0 24px',
 }
 
 const cardStyle = {

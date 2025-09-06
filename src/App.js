@@ -13,6 +13,7 @@ const AhCounter = lazy(() => import('./components/AhCounter').then(module => ({ 
 const Timekeeper = lazy(() => import('./components/Timekeeper').then(module => ({ default: module.Timekeeper })));
 const About = lazy(() => import('./components/About').then(module => ({ default: module.About })));
 const GeneralEvaluator = lazy(() => import('./components/GeneralEvaluator').then(module => ({ default: module.GeneralEvaluator })));
+const Resources = lazy(() => import('./components/Resources').then(module => ({ default: module.Resources })));
 
 const {Content} = Layout;
 
@@ -41,6 +42,8 @@ const AppContent = () => {
                 return 'grammarian';
             case '/general-evaluator':
                 return 'general_evaluator';
+            case '/resources':
+                return 'resources';
             case '/about':
                 return 'about';
             default:
@@ -66,6 +69,9 @@ const AppContent = () => {
                 break;
             case 'general_evaluator':
                 navigate('/general-evaluator');
+                break;
+            case 'resources':
+                navigate('/resources');
                 break;
             case 'about':
                 navigate('/about');
@@ -139,6 +145,13 @@ const AppContent = () => {
                                 <div style={{padding: window.innerWidth <= 768 ? '0 24px' : '0 48px', flex: 1, display: 'flex', flexDirection: 'column'}}>
                                     <Suspense fallback={<LoadingSpinner message="Loading General Evaluator..." />}>
                                         <GeneralEvaluator />
+                                    </Suspense>
+                                </div>
+                            } />
+                            <Route path="/resources" element={
+                                <div style={{padding: window.innerWidth <= 768 ? '0 24px' : '0 48px', flex: 1, display: 'flex', flexDirection: 'column'}}>
+                                    <Suspense fallback={<LoadingSpinner message="Loading Resources..." />}>
+                                        <Resources />
                                     </Suspense>
                                 </div>
                             } />

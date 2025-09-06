@@ -24,6 +24,7 @@ const HeaderMenu = ({selectedKey, onMenuClick}) => {
         { key: 'timekeeper', label: 'Timekeeper' },
         { key: 'grammarian', label: 'Grammarian' },
         { key: 'general_evaluator', label: 'General Evaluator' },
+        { key: 'resources', label: 'Resources' },
         { key: 'about', label: 'About' },
     ];
 

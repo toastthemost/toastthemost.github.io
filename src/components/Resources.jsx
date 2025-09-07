@@ -454,7 +454,7 @@ export function Resources() {
                                 display: 'block',
                                 marginBottom: 16
                             }}>
-                                Speech evaluation guides, role player resources, and essential tools for Toastmasters meetings. Download PDFs and images for effective evaluations.
+                                Speech Evaluation forms and essential tools for Toastmasters meetings
                             </Text>
 
                             <Divider style={{ margin: '12px 0' }} />
@@ -488,27 +488,67 @@ export function Resources() {
                                                         {
                                                             title: "Ice Breaker",
                                                             description: "Your first speech project. Get to know your audience and let them get to know you.",
-                                                            filename: "L1-Ice-Breaker.pdf"
+                                                            filename: "L1-Ice-Breaker.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" },
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" },
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
                                                         },
                                                         {
                                                             title: "Writing a Speech with Purpose",
                                                             description: "Learn to write speeches with clear objectives and purpose-driven content.",
-                                                            filename: "L1-Writing-a-Speech-with-Purpose.pdf"
+                                                            filename: "L1-Writing-a-Speech-with-Purpose.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" },
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" },
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
                                                         },
                                                         {
                                                             title: "Introduction to Vocal Variety & Body Language",
                                                             description: "Master the fundamentals of vocal variety and effective body language in speaking.",
-                                                            filename: "L1-Introduction-to-Vocal-Variety-and-Body-Language.pdf"
+                                                            filename: "L1-Introduction-to-Vocal-Variety-and-Body-Language.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" },
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" },
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
                                                         },
                                                         {
                                                             title: "Evaluation & Feedback (1st Speech)",
                                                             description: "Comprehensive guide for evaluating first speeches with constructive feedback techniques.",
-                                                            filename: "L1-Evaluation-and-Feedback-1st-Speech.pdf"
+                                                            filename: "L1-Evaluation-and-Feedback-1st-Speech.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" },
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" },
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
                                                         },
                                                         {
                                                             title: "Evaluation & Feedback (2nd Speech)",
                                                             description: "Advanced evaluation techniques and feedback methods for second-level speeches.",
-                                                            filename: "L1-Evaluation-and-Feedback-2nd-Speech.pdf"
+                                                            filename: "L1-Evaluation-and-Feedback-2nd-Speech.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" },
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" },
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
                                                         }
                                                     ]}
                                                     renderItem={(item) => (
@@ -552,13 +592,56 @@ export function Resources() {
                                                                     </Text>
                                                                 }
                                                                 description={
-                                                                    <Text style={{ 
-                                                                        color: '#666',
-                                                                        fontSize: 11,
-                                                                        lineHeight: 1.3
-                                                                    }}>
-                                                                        {item.description}
-                                                                    </Text>
+                                                                    <div>
+                                                                        <Text style={{ 
+                                                                            color: '#666',
+                                                                            fontSize: 11,
+                                                                            lineHeight: 1.3,
+                                                                            display: 'block',
+                                                                            marginBottom: (item.pathways || item.pathway) ? '8px' : '0'
+                                                                        }}>
+                                                                            {item.description}
+                                                                        </Text>
+                                                                        {(item.pathways || item.pathway) && (
+                                                                            <div style={{
+                                                                                display: 'flex',
+                                                                                flexWrap: 'wrap',
+                                                                                gap: '8px',
+                                                                                alignItems: 'center',
+                                                                                marginTop: '8px',
+                                                                                maxWidth: '100%'
+                                                                            }}>
+                                                                                {item.pathways ? item.pathways.map((pathway, index) => (
+                                                                                    <img 
+                                                                                        key={index}
+                                                                                        src={pathway.badge} 
+                                                                                        alt={pathway.name}
+                                                                                        title={pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )) : (
+                                                                                    <img 
+                                                                                        src={item.pathway.badge} 
+                                                                                        alt={item.pathway.name}
+                                                                                        title={item.pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
                                                                 }
                                                             />
                                                         </List.Item>
@@ -585,7 +668,61 @@ export function Resources() {
                                                         {
                                                             title: "Understanding Your Leadership Style",
                                                             description: "Discover and understand your unique leadership style and how to apply it effectively.",
-                                                            filename: "L2-Understand-Your-Leadership-Style.pdf"
+                                                            filename: "L2-Understand-Your-Leadership-Style.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Understanding Your Communication Style",
+                                                            description: "Identify your communication preferences and adapt your style for different audiences.",
+                                                            filename: "L2-Understanding-your-Communication-style.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Connect with Your Audience",
+                                                            description: "Learn techniques to build rapport and connect effectively with your audience.",
+                                                            filename: "L2-Connect-with-Your-Audience.pdf",
+                                                            pathways: [
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Know Your Sense of Humor",
+                                                            description: "Discover your unique humor style and learn to use it effectively in speeches.",
+                                                            filename: "L2-Know-Your-Sense-of-Humor.pdf",
+                                                            pathways: [
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Active Listening",
+                                                            description: "Develop active listening skills to improve communication and understanding.",
+                                                            filename: "L2-Active-Listening.pdf",
+                                                            pathways: [
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Introduction to Toastmaster Mentoring",
+                                                            description: "Learn the fundamentals of mentoring fellow Toastmasters members.",
+                                                            filename: "L2-Introduction-to-Toastmaster-mentoring.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" },
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" },
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
                                                         }
                                                     ]}
                                                     renderItem={(item) => (
@@ -629,13 +766,558 @@ export function Resources() {
                                                                     </Text>
                                                                 }
                                                                 description={
-                                                                    <Text style={{ 
-                                                                        color: '#666',
-                                                                        fontSize: 11,
-                                                                        lineHeight: 1.3
+                                                                    <div>
+                                                                        <Text style={{ 
+                                                                            color: '#666',
+                                                                            fontSize: 11,
+                                                                            lineHeight: 1.3,
+                                                                            display: 'block',
+                                                                            marginBottom: item.pathway ? '8px' : '0'
+                                                                        }}>
+                                                                            {item.description}
+                                                                        </Text>
+                                                                        {(item.pathways || item.pathway) && (
+                                                                            <div style={{
+                                                                                display: 'flex',
+                                                                                flexWrap: 'wrap',
+                                                                                gap: '8px',
+                                                                                alignItems: 'center',
+                                                                                marginTop: '8px',
+                                                                                maxWidth: '100%'
+                                                                            }}>
+                                                                                {item.pathways ? item.pathways.map((pathway, index) => (
+                                                                                    <img 
+                                                                                        key={index}
+                                                                                        src={pathway.badge} 
+                                                                                        alt={pathway.name}
+                                                                                        title={pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )) : (
+                                                                                    <img 
+                                                                                        src={item.pathway.badge} 
+                                                                                        alt={item.pathway.name}
+                                                                                        title={item.pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                }
+                                                            />
+                                                        </List.Item>
+                                                    )}
+                                                />
+                                            )
+                                        },
+                                        {
+                                            key: 'level3',
+                                            label: (
+                                                <Title level={5} style={{ 
+                                                    color: '#722ed1', 
+                                                    margin: 0,
+                                                    fontSize: screens.xs ? 14 : 16
+                                                }}>
+                                                    🚀 Speech Evaluations: Level 3
+                                                </Title>
+                                            ),
+                                            children: (
+                                                <List
+                                                    itemLayout="horizontal"
+                                                    size="small"
+                                                    dataSource={[
+                                                        {
+                                                            title: "Negotiate the Best Outcome",
+                                                            description: "Develop negotiation skills to achieve win-win outcomes in various situations.",
+                                                            filename: "L3-Negotiate-the-Best-Outcome.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Engage Your Audience with Humor",
+                                                            description: "Master the art of using humor to connect with and engage your audience.",
+                                                            filename: "L3-Engage-Your-Audience-with-Humor.pdf",
+                                                            pathways: [
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Understanding Emotional Intelligence",
+                                                            description: "Develop emotional intelligence skills to improve communication and leadership.",
+                                                            filename: "L3-Understanding-Emotional-Intelligence.pdf",
+                                                            pathways: [
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Understanding Conflict Resolution",
+                                                            description: "Learn effective strategies for resolving conflicts and managing difficult situations.",
+                                                            filename: "L3-Understanding-Conflict-Resolution.pdf",
+                                                            pathways: [
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Persuasive Speaking",
+                                                            description: "Learn to craft compelling arguments and influence your audience effectively.",
+                                                            filename: "L3-Persuasive-Speaking.pdf",
+                                                            pathways: [
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Develop a Communication Plan",
+                                                            description: "Create strategic communication plans for effective message delivery.",
+                                                            filename: "L3-Develop-a-Communication-Plan.pdf",
+                                                            pathways: [
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
+                                                        }
+                                                    ]}
+                                                    renderItem={(item) => (
+                                                        <List.Item
+                                                            actions={[
+                                                                <Button
+                                                                    type="primary"
+                                                                    size={screens.xs ? "small" : "middle"}
+                                                                    onClick={() => window.open(`/pdfs/${item.filename}`, '_blank')}
+                                                                    style={{
+                                                                        minWidth: screens.xs ? '40px' : 'auto',
+                                                                        padding: screens.xs ? '4px 8px' : '8px 16px',
+                                                                        fontSize: screens.xs ? '12px' : '14px',
+                                                                        fontWeight: 'bold'
+                                                                    }}
+                                                                >
+                                                                    PDF
+                                                                </Button>
+                                                            ]}
+                                                            style={{
+                                                                padding: '8px 0',
+                                                                borderBottom: '1px solid #f5f5f5'
+                                                            }}
+                                                        >
+                                                            <List.Item.Meta
+                                                                avatar={
+                                                                    <FileTextOutlined 
+                                                                        style={{ 
+                                                                            fontSize: 18, 
+                                                                            color: '#722ed1',
+                                                                            marginTop: 2
+                                                                        }} 
+                                                                    />
+                                                                }
+                                                                title={
+                                                                    <Text strong style={{ 
+                                                                        fontSize: 13,
+                                                                        color: '#1d1d1d'
                                                                     }}>
-                                                                        {item.description}
+                                                                        {item.title}
                                                                     </Text>
+                                                                }
+                                                                description={
+                                                                    <div>
+                                                                        <Text style={{ 
+                                                                            color: '#666',
+                                                                            fontSize: 11,
+                                                                            lineHeight: 1.3,
+                                                                            display: 'block',
+                                                                            marginBottom: (item.pathways || item.pathway) ? '8px' : '0'
+                                                                        }}>
+                                                                            {item.description}
+                                                                        </Text>
+                                                                        {(item.pathways || item.pathway) && (
+                                                                            <div style={{
+                                                                                display: 'flex',
+                                                                                flexWrap: 'wrap',
+                                                                                gap: '8px',
+                                                                                alignItems: 'center',
+                                                                                marginTop: '8px',
+                                                                                maxWidth: '100%'
+                                                                            }}>
+                                                                                {item.pathways ? item.pathways.map((pathway, index) => (
+                                                                                    <img 
+                                                                                        key={index}
+                                                                                        src={pathway.badge} 
+                                                                                        alt={pathway.name}
+                                                                                        title={pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )) : (
+                                                                                    <img 
+                                                                                        src={item.pathway.badge} 
+                                                                                        alt={item.pathway.name}
+                                                                                        title={item.pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                }
+                                                            />
+                                                        </List.Item>
+                                                    )}
+                                                />
+                                            )
+                                        },
+                                        {
+                                            key: 'level4',
+                                            label: (
+                                                <Title level={5} style={{ 
+                                                    color: '#eb2f96', 
+                                                    margin: 0,
+                                                    fontSize: screens.xs ? 14 : 16
+                                                }}>
+                                                    💪 Speech Evaluations: Level 4
+                                                </Title>
+                                            ),
+                                            children: (
+                                                <List
+                                                    itemLayout="horizontal"
+                                                    size="small"
+                                                    dataSource={[
+                                                        {
+                                                            title: "Manage Change",
+                                                            description: "Learn to effectively lead and manage organizational and team change processes.",
+                                                            filename: "L4-Manage-Change.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "The Power of Humor in Impromptu Speech",
+                                                            description: "Use humor effectively in spontaneous speaking situations and impromptu responses.",
+                                                            filename: "L4-The-Power-of-Humor-In-an-Impromptu-Speech.pdf",
+                                                            pathways: [
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Motivate Others",
+                                                            description: "Discover techniques to inspire and motivate team members and colleagues.",
+                                                            filename: "L4-Motivate-Others.pdf",
+                                                            pathways: [
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Leading in Difficult Situations",
+                                                            description: "Develop leadership skills for challenging circumstances and crisis management.",
+                                                            filename: "L4-Leading-in-Difficult-Situation.pdf",
+                                                            pathways: [
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Managing a Difficult Audience",
+                                                            description: "Learn strategies to handle challenging audiences and maintain control of your presentation.",
+                                                            filename: "L4-Managing-a-Difficult-Audience.pdf",
+                                                            pathways: [
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Communicate Change",
+                                                            description: "Master the art of communicating organizational and personal change effectively.",
+                                                            filename: "L4-Communicate-Change.pdf",
+                                                            pathways: [
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
+                                                        }
+                                                    ]}
+                                                    renderItem={(item) => (
+                                                        <List.Item
+                                                            actions={[
+                                                                <Button
+                                                                    type="primary"
+                                                                    size={screens.xs ? "small" : "middle"}
+                                                                    onClick={() => window.open(`/pdfs/${item.filename}`, '_blank')}
+                                                                    style={{
+                                                                        minWidth: screens.xs ? '40px' : 'auto',
+                                                                        padding: screens.xs ? '4px 8px' : '8px 16px',
+                                                                        fontSize: screens.xs ? '12px' : '14px',
+                                                                        fontWeight: 'bold'
+                                                                    }}
+                                                                >
+                                                                    PDF
+                                                                </Button>
+                                                            ]}
+                                                            style={{
+                                                                padding: '8px 0',
+                                                                borderBottom: '1px solid #f5f5f5'
+                                                            }}
+                                                        >
+                                                            <List.Item.Meta
+                                                                avatar={
+                                                                    <FileTextOutlined 
+                                                                        style={{ 
+                                                                            fontSize: 18, 
+                                                                            color: '#eb2f96',
+                                                                            marginTop: 2
+                                                                        }} 
+                                                                    />
+                                                                }
+                                                                title={
+                                                                    <Text strong style={{ 
+                                                                        fontSize: 13,
+                                                                        color: '#1d1d1d'
+                                                                    }}>
+                                                                        {item.title}
+                                                                    </Text>
+                                                                }
+                                                                description={
+                                                                    <div>
+                                                                        <Text style={{ 
+                                                                            color: '#666',
+                                                                            fontSize: 11,
+                                                                            lineHeight: 1.3,
+                                                                            display: 'block',
+                                                                            marginBottom: (item.pathways || item.pathway) ? '8px' : '0'
+                                                                        }}>
+                                                                            {item.description}
+                                                                        </Text>
+                                                                        {(item.pathways || item.pathway) && (
+                                                                            <div style={{
+                                                                                display: 'flex',
+                                                                                flexWrap: 'wrap',
+                                                                                gap: '8px',
+                                                                                alignItems: 'center',
+                                                                                marginTop: '8px',
+                                                                                maxWidth: '100%'
+                                                                            }}>
+                                                                                {item.pathways ? item.pathways.map((pathway, index) => (
+                                                                                    <img 
+                                                                                        key={index}
+                                                                                        src={pathway.badge} 
+                                                                                        alt={pathway.name}
+                                                                                        title={pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )) : (
+                                                                                    <img 
+                                                                                        src={item.pathway.badge} 
+                                                                                        alt={item.pathway.name}
+                                                                                        title={item.pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
+                                                                }
+                                                            />
+                                                        </List.Item>
+                                                    )}
+                                                />
+                                            )
+                                        },
+                                        {
+                                            key: 'level5',
+                                            label: (
+                                                <Title level={5} style={{ 
+                                                    color: '#13c2c2', 
+                                                    margin: 0,
+                                                    fontSize: screens.xs ? 14 : 16
+                                                }}>
+                                                    🏆 Speech Evaluations: Level 5
+                                                </Title>
+                                            ),
+                                            children: (
+                                                <List
+                                                    itemLayout="horizontal"
+                                                    size="small"
+                                                    dataSource={[
+                                                        {
+                                                            title: "Lead in Any Situation",
+                                                            description: "Master adaptive leadership skills to excel in diverse and challenging situations.",
+                                                            filename: "L5-Lead-in-Any-Situation.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Deliver Your Message with Humor",
+                                                            description: "Master advanced humor techniques to enhance your message delivery and audience engagement.",
+                                                            filename: "L5-Deliver-Your-Message-with-Humor.pdf",
+                                                            pathways: [
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Team Building",
+                                                            description: "Learn advanced strategies for building and leading high-performing teams.",
+                                                            filename: "L5-Team-Building.pdf",
+                                                            pathways: [
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "High Performance Leadership",
+                                                            description: "Develop advanced leadership skills for high-performance teams and organizations.",
+                                                            filename: "L5-High-Performance-Leadership.pdf",
+                                                            pathways: [
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Prepare to Speak Professionally",
+                                                            description: "Develop professional speaking skills for corporate and formal presentation contexts.",
+                                                            filename: "L5-Prepare-to-Speak-Professionally.pdf",
+                                                            pathways: [
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Develop Your Vision",
+                                                            description: "Learn to create and communicate a compelling vision that inspires and motivates others.",
+                                                            filename: "L5-Develop-Your-Vision.pdf",
+                                                            pathways: [
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
+                                                        },
+                                                        {
+                                                            title: "Reflect on Your Path",
+                                                            description: "Evaluate your speaking and leadership journey and plan your continued growth.",
+                                                            filename: "L5-Reflect-on-Your-Path.pdf",
+                                                            pathways: [
+                                                                { name: "Dynamic Leadership", badge: "/images/dynamic-leadership-path.svg" },
+                                                                { name: "Engaging Humor", badge: "/images/engaging-humor-path.svg" },
+                                                                { name: "Motivational Strategies", badge: "/images/motivational-strategies-path.svg" },
+                                                                { name: "Persuasive Influence", badge: "/images/persuasive-influence-path.svg" },
+                                                                { name: "Presentation Mastery", badge: "/images/presentation-mastery-path.svg" },
+                                                                { name: "Visionary Communication", badge: "/images/visionary-communication-path.svg" }
+                                                            ]
+                                                        }
+                                                    ]}
+                                                    renderItem={(item) => (
+                                                        <List.Item
+                                                            actions={[
+                                                                <Button
+                                                                    type="primary"
+                                                                    size={screens.xs ? "small" : "middle"}
+                                                                    onClick={() => window.open(`/pdfs/${item.filename}`, '_blank')}
+                                                                    style={{
+                                                                        minWidth: screens.xs ? '40px' : 'auto',
+                                                                        padding: screens.xs ? '4px 8px' : '8px 16px',
+                                                                        fontSize: screens.xs ? '12px' : '14px',
+                                                                        fontWeight: 'bold'
+                                                                    }}
+                                                                >
+                                                                    PDF
+                                                                </Button>
+                                                            ]}
+                                                            style={{
+                                                                padding: '8px 0',
+                                                                borderBottom: '1px solid #f5f5f5'
+                                                            }}
+                                                        >
+                                                            <List.Item.Meta
+                                                                avatar={
+                                                                    <FileTextOutlined 
+                                                                        style={{ 
+                                                                            fontSize: 18, 
+                                                                            color: '#13c2c2',
+                                                                            marginTop: 2
+                                                                        }} 
+                                                                    />
+                                                                }
+                                                                title={
+                                                                    <Text strong style={{ 
+                                                                        fontSize: 13,
+                                                                        color: '#1d1d1d'
+                                                                    }}>
+                                                                        {item.title}
+                                                                    </Text>
+                                                                }
+                                                                description={
+                                                                    <div>
+                                                                        <Text style={{ 
+                                                                            color: '#666',
+                                                                            fontSize: 11,
+                                                                            lineHeight: 1.3,
+                                                                            display: 'block',
+                                                                            marginBottom: (item.pathways || item.pathway) ? '8px' : '0'
+                                                                        }}>
+                                                                            {item.description}
+                                                                        </Text>
+                                                                        {(item.pathways || item.pathway) && (
+                                                                            <div style={{
+                                                                                display: 'flex',
+                                                                                flexWrap: 'wrap',
+                                                                                gap: '8px',
+                                                                                alignItems: 'center',
+                                                                                marginTop: '8px',
+                                                                                maxWidth: '100%'
+                                                                            }}>
+                                                                                {item.pathways ? item.pathways.map((pathway, index) => (
+                                                                                    <img 
+                                                                                        key={index}
+                                                                                        src={pathway.badge} 
+                                                                                        alt={pathway.name}
+                                                                                        title={pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )) : (
+                                                                                    <img 
+                                                                                        src={item.pathway.badge} 
+                                                                                        alt={item.pathway.name}
+                                                                                        title={item.pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
                                                                 }
                                                             />
                                                         </List.Item>
@@ -761,13 +1443,56 @@ export function Resources() {
                                                                     </Text>
                                                                 }
                                                                 description={
-                                                                    <Text style={{ 
-                                                                        color: '#666',
-                                                                        fontSize: 11,
-                                                                        lineHeight: 1.3
-                                                                    }}>
-                                                                        {item.description}
-                                                                    </Text>
+                                                                    <div>
+                                                                        <Text style={{ 
+                                                                            color: '#666',
+                                                                            fontSize: 11,
+                                                                            lineHeight: 1.3,
+                                                                            display: 'block',
+                                                                            marginBottom: (item.pathways || item.pathway) ? '8px' : '0'
+                                                                        }}>
+                                                                            {item.description}
+                                                                        </Text>
+                                                                        {(item.pathways || item.pathway) && (
+                                                                            <div style={{
+                                                                                display: 'flex',
+                                                                                flexWrap: 'wrap',
+                                                                                gap: '8px',
+                                                                                alignItems: 'center',
+                                                                                marginTop: '8px',
+                                                                                maxWidth: '100%'
+                                                                            }}>
+                                                                                {item.pathways ? item.pathways.map((pathway, index) => (
+                                                                                    <img 
+                                                                                        key={index}
+                                                                                        src={pathway.badge} 
+                                                                                        alt={pathway.name}
+                                                                                        title={pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )) : (
+                                                                                    <img 
+                                                                                        src={item.pathway.badge} 
+                                                                                        alt={item.pathway.name}
+                                                                                        title={item.pathway.name}
+                                                                                        style={{ 
+                                                                                            height: screens.xs ? '50px' : '80px', 
+                                                                                            width: 'auto',
+                                                                                            opacity: 0.9,
+                                                                                            maxWidth: screens.xs ? 'calc(33.33% - 8px)' : 'calc(16.66% - 8px)',
+                                                                                            objectFit: 'contain'
+                                                                                        }}
+                                                                                    />
+                                                                                )}
+                                                                            </div>
+                                                                        )}
+                                                                    </div>
                                                                 }
                                                             />
                                                         </List.Item>

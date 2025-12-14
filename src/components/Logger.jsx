@@ -20,6 +20,32 @@ export const LogSection = ({page, logs, setLogs}) => {
 
     const handleResetLogsButton = () => {
         setLogs('');
+        // Clear localStorage based on page
+        if (page === 'timekeeper') {
+            localStorage.removeItem('toastmasters-timekeeper-logs');
+        } else if (page === 'ah-counter') {
+            const savedData = localStorage.getItem('toastmasters-ah-counter');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    parsedData.logs = '';
+                    localStorage.setItem('toastmasters-ah-counter', JSON.stringify(parsedData));
+                } catch (error) {
+                    console.error('Error updating ah-counter logs:', error);
+                }
+            }
+        } else if (page === 'grammarian') {
+            const savedData = localStorage.getItem('toastmasters-grammarian');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    parsedData.logs = '';
+                    localStorage.setItem('toastmasters-grammarian', JSON.stringify(parsedData));
+                } catch (error) {
+                    console.error('Error updating grammarian logs:', error);
+                }
+            }
+        }
         showMessage('warning', "Logs section cleared !!");
     };
 

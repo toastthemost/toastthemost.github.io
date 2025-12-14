@@ -1,6 +1,6 @@
 import {Typography, Flex, Descriptions, Divider, Row, Col, Checkbox, Space, Input, Button, Radio, message, Tour, Grid, Affix } from 'antd';
 import {cardStyle} from '../styles/styles';
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {LogSection} from "./Logger";
 import {SpeakerSection} from "./SpeakersContent";
 import {HelpCircle} from 'lucide-react';
@@ -63,10 +63,40 @@ const Grammarian = ({speakerKeyState, speakersListState, speechTypeState, speake
             setCollectedQuotesValues('');
             setOverallGrammer(null);
             setCommentsValue('');
+            localStorage.removeItem('toastmasters-grammarian');
         };
 
         const [logs, setLogs] = useState('');
-        
+
+        // Load data from localStorage on component mount
+        useEffect(() => {
+            const savedData = localStorage.getItem('toastmasters-grammarian');
+            if (savedData) {
+                try {
+                    const parsedData = JSON.parse(savedData);
+                    if (parsedData.collectedQuotes) setCollectedQuotesValues(parsedData.collectedQuotes);
+                    if (parsedData.collectedImproperUsage) setCollectedImproperUsage(parsedData.collectedImproperUsage);
+                    if (parsedData.overallGrammer) setOverallGrammer(parsedData.overallGrammer);
+                    if (parsedData.commentsValue) setCommentsValue(parsedData.commentsValue);
+                    if (parsedData.logs) setLogs(parsedData.logs);
+                } catch (error) {
+                    console.error('Error parsing saved Grammarian data:', error);
+                }
+            }
+        }, []);
+
+        // Save data to localStorage whenever state changes
+        useEffect(() => {
+            const dataToSave = {
+                collectedQuotes,
+                collectedImproperUsage,
+                overallGrammer,
+                commentsValue,
+                logs
+            };
+            localStorage.setItem('toastmasters-grammarian', JSON.stringify(dataToSave));
+        }, [collectedQuotes, collectedImproperUsage, overallGrammer, commentsValue, logs]);
+
         // Tour functionality
         const [isTourOpen, setIsTourOpen] = useState(false);
         const speakerSectionRef = useRef(null);

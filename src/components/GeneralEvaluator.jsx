@@ -284,6 +284,29 @@ export function GeneralEvaluator() {
     const [form] = Form.useForm();
     const screens = Grid.useBreakpoint();
 
+    // Load form data from localStorage on component mount
+    useEffect(() => {
+        const savedData = localStorage.getItem('toastmasters-general-evaluator');
+        if (savedData) {
+            try {
+                const parsedData = JSON.parse(savedData);
+                form.setFieldsValue(parsedData);
+            } catch (error) {
+                console.error('Error parsing saved General Evaluator data:', error);
+            }
+        }
+    }, [form]);
+
+    // Save form data to localStorage whenever it changes
+    const saveFormData = () => {
+        try {
+            const formData = form.getFieldsValue();
+            localStorage.setItem('toastmasters-general-evaluator', JSON.stringify(formData));
+        } catch (error) {
+            console.error('Error saving General Evaluator data:', error);
+        }
+    };
+
     // Meeting Sections Expand Control
     const [expandAll, setExpandAll] = useState(false);
     const [expandSignal, setExpandSignal] = useState(0);
@@ -438,7 +461,7 @@ export function GeneralEvaluator() {
                         sectionToImprove.push(`  ${negativeStatement}`);
                     }
                     // Skip undefined/null values (untouched checkboxes)
-                } else if (field.type === 'textarea' && field.name === 'comments') {
+                } else if (field.type === 'textarea') {
                     const commentValue = sectionValues?.[field.name];
                     if (commentValue && commentValue.trim() !== '') {
                         sectionComments = commentValue.trim();
@@ -573,6 +596,7 @@ export function GeneralEvaluator() {
     // Handle reset sections
     const handleResetSections = () => {
         form.resetFields();
+        localStorage.removeItem('toastmasters-general-evaluator');
     };
 
     return (
@@ -598,7 +622,7 @@ export function GeneralEvaluator() {
                 backgroundColor: 'rgba(255, 255, 255, 0.85)',
                 zIndex: 1
             }}></div>
-            <Form form={form} layout="vertical" initialValues={initialValues} style={{ marginTop: 32, position: 'relative', zIndex: 2, flex: 1 }}>
+            <Form form={form} layout="vertical" initialValues={initialValues} onFieldsChange={saveFormData} style={{ marginTop: 32, position: 'relative', zIndex: 2, flex: 1 }}>
             <Row gutter={[8, 16]} justify="center">
                 <Col xs={24} md={12} lg={8} style={{marginBottom: 24}} ref={meetingSectionsRef}>
                     <div style={cardStyle}>

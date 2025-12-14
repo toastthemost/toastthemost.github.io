@@ -2,7 +2,7 @@ import {
     Typography, Flex, Descriptions, Divider, Row, Col, Input, Button, message, Table, Grid, Collapse, Tour, Affix
 } from 'antd';
 import {cardStyle, tableIconStyle} from '../styles/styles';
-import React, {useState, useRef} from "react";
+import React, {useState, useRef, useEffect} from "react";
 import {PlusCircleTwoTone} from '@ant-design/icons';
 import {HelpCircle} from 'lucide-react';
 import {LogSection} from "./Logger";
@@ -99,10 +99,36 @@ const AhCounter = ({speakerKeyState, speakersListState, speechTypeState, speaker
         setRetrievedCustomFiller('')
         setFillerList([]);
         setCommentsValue('');
+        localStorage.removeItem('toastmasters-ah-counter');
     }
 
     const [logs, setLogs] = useState('');
-    
+
+    // Load data from localStorage on component mount
+    useEffect(() => {
+        const savedData = localStorage.getItem('toastmasters-ah-counter');
+        if (savedData) {
+            try {
+                const parsedData = JSON.parse(savedData);
+                if (parsedData.fillerList) setFillerList(parsedData.fillerList);
+                if (parsedData.commentsValue) setCommentsValue(parsedData.commentsValue);
+                if (parsedData.logs) setLogs(parsedData.logs);
+            } catch (error) {
+                console.error('Error parsing saved Ah-Counter data:', error);
+            }
+        }
+    }, []);
+
+    // Save data to localStorage whenever state changes
+    useEffect(() => {
+        const dataToSave = {
+            fillerList,
+            commentsValue,
+            logs
+        };
+        localStorage.setItem('toastmasters-ah-counter', JSON.stringify(dataToSave));
+    }, [fillerList, commentsValue, logs]);
+
     // Tour functionality
     const [isTourOpen, setIsTourOpen] = useState(false);
     const speakerSectionRef = useRef(null);

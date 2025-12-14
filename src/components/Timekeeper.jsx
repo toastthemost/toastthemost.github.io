@@ -14,9 +14,9 @@ import {
 } from 'antd';
 import {blue, green, yellow, red} from '@ant-design/colors';
 import {cardStyle} from '../styles/styles';
-import React, {useRef, useState} from "react";
+import React, {useRef, useState, useEffect} from "react";
 import toast from 'react-hot-toast';
-import {Play, Square, Timer, HelpCircle} from 'lucide-react';
+import {Play, Square, Timer, HelpCircle, Monitor} from 'lucide-react';
 import {useTimerShortcuts} from '../hooks/useKeyboardShortcuts';
 
 import {LogSection} from "./Logger";
@@ -66,11 +66,137 @@ export const Timekeeper = ({speakerKeyState, speakersListState, speechTypeState,
     const [strokeColor, setStrokeColor] = useState(blue[5])
     const [percentage, setPercentage] = useState(0);
     const [speechInProgress, setSpeechInProgress] = useState(false);
+    const [externalWindow, setExternalWindow] = useState(null);
+    const [displayActive, setDisplayActive] = useState(false);
+    const displayTimerRef = useRef(null);
 
     const resetTimerFlags = () => {
         minShownRef.current = false;
         midShownRef.current = false;
         maxShownRef.current = false;
+    };
+
+    const openExternalDisplay = () => {
+        // Close existing window if open
+        if (externalWindow && !externalWindow.closed) {
+            externalWindow.close();
+        }
+
+        // Open new window
+        const newWindow = window.open('', 'TimerDisplay', 'width=800,height=600,menubar=no,toolbar=no,location=no,status=no,scrollbars=no,resizable=yes');
+        
+        if (newWindow) {
+            // Set up the external window content
+            newWindow.document.write(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Timer Display</title>
+                    <style>
+                        body {
+                            margin: 0;
+                            padding: 0;
+                            background-color: #000;
+                            display: flex;
+                            justify-content: center;
+                            align-items: center;
+                            height: 100vh;
+                            font-family: Arial, sans-serif;
+                        }
+                        #timer-image {
+                            max-width: 100%;
+                            max-height: 100%;
+                            object-fit: contain;
+                        }
+                        #timer-status {
+                            position: absolute;
+                            top: 20px;
+                            left: 20px;
+                            color: white;
+                            font-size: 18px;
+                            background: rgba(0,0,0,0.7);
+                            padding: 10px;
+                            border-radius: 5px;
+                        }
+                    </style>
+                </head>
+                <body>
+                    <div id="timer-status">Default Display</div>
+                    <img id="timer-image" src="/pdfs/Timer-Blue.jpg" alt="Timer Display" />
+                </body>
+                </html>
+            `);
+            newWindow.document.close();
+            
+            setExternalWindow(newWindow);
+            setDisplayActive(true);
+            
+            // Start the display sequence
+            startDisplaySequence(newWindow);
+            
+            toast.success("External timer display opened!", {
+                icon: <Monitor size={16} />,
+            });
+        } else {
+            toast.error("Could not open external window. Please allow pop-ups for this site.");
+        }
+    };
+
+    const startDisplaySequence = (window) => {
+        let currentPhase = 0; // 0: blue (default), 1: green, 2: yellow
+        const phases = [
+            { image: '/pdfs/Timer-Blue.jpg', status: 'Default Display', color: '#1677ff' },
+            { image: '/pdfs/Timer-Green.jpg', status: 'Green Phase', color: '#52c41a' },
+            { image: '/pdfs/Timer-Yellow.jpg', status: 'Yellow Phase', color: '#faad14' }
+        ];
+
+        const updateDisplay = () => {
+            if (window && !window.closed) {
+                const phase = phases[currentPhase];
+                const img = window.document.getElementById('timer-image');
+                const status = window.document.getElementById('timer-status');
+                
+                if (img && status) {
+                    img.src = phase.image;
+                    status.textContent = phase.status;
+                    status.style.backgroundColor = phase.color + '80'; // Add transparency
+                }
+            }
+        };
+
+        // Initial display
+        updateDisplay();
+
+        // Set up 30-second intervals
+        displayTimerRef.current = setInterval(() => {
+            if (window && !window.closed) {
+                currentPhase = (currentPhase + 1) % phases.length;
+                updateDisplay();
+            } else {
+                // Window was closed, clean up
+                clearInterval(displayTimerRef.current);
+                setDisplayActive(false);
+                setExternalWindow(null);
+            }
+        }, 30000); // 30 seconds
+    };
+
+    const closeExternalDisplay = () => {
+        if (displayTimerRef.current) {
+            clearInterval(displayTimerRef.current);
+            displayTimerRef.current = null;
+        }
+        
+        if (externalWindow && !externalWindow.closed) {
+            externalWindow.close();
+        }
+        
+        setExternalWindow(null);
+        setDisplayActive(false);
+        
+        toast("External display closed", {
+            icon: <Monitor size={16} />,
+        });
     };
 
     const formatTimerDisplay = (elapsed) => {
@@ -140,6 +266,21 @@ export const Timekeeper = ({speakerKeyState, speakersListState, speechTypeState,
     };
 
     const [logs, setLogs] = useState('');
+
+    // Load logs from localStorage on component mount
+    useEffect(() => {
+        const savedLogs = localStorage.getItem('toastmasters-timekeeper-logs');
+        if (savedLogs) {
+            setLogs(savedLogs);
+        }
+    }, []);
+
+    // Save logs to localStorage whenever logs change
+    useEffect(() => {
+        if (logs !== '') {
+            localStorage.setItem('toastmasters-timekeeper-logs', logs);
+        }
+    }, [logs]);
 
     // Add keyboard shortcuts
     const { activeShortcuts } = useTimerShortcuts(
